@@ -1,0 +1,8 @@
+.device {
+    justify-self: center;
+    width: 640px;
+    height: 960px;
+    overflow:hidden;
+    background-color: #fff6f4;
+    position:relative;
+}

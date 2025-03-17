@@ -2,13 +2,118 @@
 
 <link rel="stylesheet" href="./css/global.css">
 
+<head>
+    <style>
+      h1, h2 {
+        margin: 30px;
+      }
+      .profile {
+        height: 150px;
+        width: 560px;
+        margin: auto;
+        background-color: #f0e6e9;
+        border-radius: 30px;
+        display: flex;
+      }
+      .profile img {
+        height: 75%;
+        align-self: center;
+        margin: 10px 30px;
+      }
+      .profile_text {
+        height: 75%;
+        width: 50%;
+        margin: 0px 20px;
+      }
+      .profile_text h3{
+        text-align: center;
+      }
+      .edit_btn {
+        margin: 10px;
+        height: 35px;
+        width: 80px;
+        border-radius: 30px;
+        border-color: transparent;
+        align-self: self-end;
+        background-color: #bdd8a1;
+        display: flex; 
+        justify-content: center; 
+        align-items: center; 
+        text-align: center;
+    }
+
+    .shortcut_container {
+        height: 150px;
+        width: 560px;
+        margin: auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .shortcut {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .shortcut p {
+        margin-top: 8px;
+        font-size: 16px;
+        text-align: center;
+    }
+
+    .new_workout, .past_workout, .meals {
+        height: 150px;
+        width: 150px;
+        background-color: #f0e6e9;
+        border-radius: 30px;
+    }
+    .graph {
+        height: 250px;
+        width: 560px;
+        margin: auto;
+        background-color: #f0e6e9;
+        border-radius: 30px;
+    }
+    </style>
+</head>
+
 <html>
     <body>
         <div class="device">
             <h1>Home</h1>
+            <div class="profile">
+                
+                <img src="./resources/images/homepage/profile_icon.png" alt="">
+                <div class="profile_text">
+                    <h3>Welcome User!</h3>
+                    <p>Experience: TBD</p>
+                    <p>Age: TBD</p>
+                </div>
+                <button class="edit_btn">
+                    <p>Edit</p>
+                </button>
+            </div>
+            <h2>Shortcuts</h2>
+            <div class="shortcut_container">
+                <div class="shortcut">
+                    <div class="new_workout"></div>
+                    <p>New Workout</p>
+                </div>
+                <div class="shortcut">
+                    <div class="past_workout"></div>
+                    <p>Past Workouts</p>
+                </div>
+                <div class="shortcut">
+                    <div class="meals"></div>
+                    <p>Meals</p>
+                </div>
+            </div>
+            <h2>Tracking</h2>
+            <div class="graph">
 
-            <div>This is a new text, is it Roboto?</div>
-
+            </div>
             <div class="bottom-nav">
                 <div class="active">
                     <img src="./resources/images/navbar/home.png">

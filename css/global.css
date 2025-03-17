@@ -1,3 +1,22 @@
+@font-face {
+    font-family: 'Roboto';
+    src: url('../resources/fonts/Roboto/Roboto-Regular.ttf') format('truetype');
+    font-style: normal;
+}
+
+/* applying Roboto across the elements we use */
+h1 {
+    font-family: 'Roboto';
+}
+
+div {
+    font-family: 'Roboto';
+    /*
+    font-weight: 300;
+    font-size: 2em;
+    */
+}
+
 .device {
     justify-self: center;
     width: 640px;

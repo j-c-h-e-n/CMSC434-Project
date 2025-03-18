@@ -2,12 +2,83 @@
 
 <link rel="stylesheet" href="../css/global.css">
 
+
+<head>
+    <style>
+        h1, h2 {
+            margin: 30px;
+        }
+
+        h3 {
+            margin: 20px;
+        }
+        
+        .intensity-container {
+            height: 150px;
+            width: 560px;
+            margin: auto;
+            background-color: #f0e6e9;
+            border-radius: 30px;
+            display: flex;
+        }
+
+        .intensity-container + .filter-container {
+            margin-top: 40px;
+        }
+
+        .filter-container {
+            height: 150px;
+            width: 560px;
+            margin: auto;
+            background-color: #f0e6e9;
+            border-radius: 30px;
+            display: flex;
+        }
+
+        .filter-container + .results-container {
+            margin-top: 40px;
+        }
+
+        .results-container {
+            height: 340px;
+            width: 560px;
+            margin: auto;
+            background-color: #f0e6e9;
+            border-radius: 30px;
+            display: flex;
+        }
+        
+        .container-title {
+            margin: 20px;
+            font-size: 1.5em;
+        }
+
+
+
+
+    </style>
+
+    
+
+</head>
+
 <html>
     <body>
         <div class="device">
             <h1>Planning</h1>
 
+            <div class="intensity-container">
+                <div class="container-title">Intensity</div>
 
+            </div>
+            
+            <div class="filter-container">
+                <div class="container-title">Filter By</div>
+            </div>
+
+            <div class="results-container">
+                <!-- probably some javascript to retrieve results and stuff from filters -->
+            </div>
 
             <div class="bottom-nav">
                 <div class="inactive">

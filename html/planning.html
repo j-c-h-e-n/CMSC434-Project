@@ -12,6 +12,12 @@
         h3 {
             margin: 20px;
         }
+
+        button {
+            height: 30px;
+            width: 70px;
+            border-radius: 10px;
+        }
         
         .intensity-container {
             height: 150px;
@@ -20,6 +26,8 @@
             background-color: #f0e6e9;
             border-radius: 30px;
             display: flex;
+            flex-wrap: wrap;
+            align-content: flex-start; /* THIS FIXES THE DAMN BLANK SPACE THAT HAPPENS BELOW FLEX CONTAINERS */
         }
 
         .intensity-container + .filter-container {
@@ -33,6 +41,8 @@
             background-color: #f0e6e9;
             border-radius: 30px;
             display: flex;
+            flex-wrap: wrap;
+            align-content: flex-start; /* THIS FIXES THE DAMN BLANK SPACE THAT HAPPENS BELOW FLEX CONTAINERS */
         }
 
         .filter-container + .results-container {
@@ -40,7 +50,7 @@
         }
 
         .results-container {
-            height: 340px;
+            height: 350px;
             width: 560px;
             margin: auto;
             background-color: #f0e6e9;
@@ -51,9 +61,15 @@
         .container-title {
             margin: 20px;
             font-size: 1.5em;
+            text-wrap: nowrap;
         }
 
-
+        .button-container {
+            width: 560px;
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+        }
 
 
     </style>
@@ -69,11 +85,39 @@
 
             <div class="intensity-container">
                 <div class="container-title">Intensity</div>
+                <div class="button-container">
+                    <!-- these are radio buttons -->
+                    <input type="radio" class="" name="difficulty" id="easy"/>
+                    <label for="easy">Easy</label>
+                    
+                    <input type="radio" class="" name="difficulty" id="medium"/>
+                    <label for="easy">Medium</label>
 
+                    <input type="radio" class="" name="difficulty" id="hard"/>
+                    <label for="easy">Hard</label>
+                
+                    <!-- https://stackoverflow.com/questions/16242980/making-radio-buttons-look-like-buttons-instead -->
+
+                </div>
             </div>
             
             <div class="filter-container">
                 <div class="container-title">Filter By</div>
+                <div class="button-container">
+                    <!-- these are checkboxes -->
+                    <input type="checkbox" class="" id="running">
+                    <label for="running">Running</label>
+
+                    <input type="checkbox" class="" id="inplace">
+                    <label for="running">In-Place</label>
+
+                    <input type="checkbox" class="" id="yoga">
+                    <label for="running">Yoga</label>
+
+                    <input type="checkbox" class="" id="weights">
+                    <label for="running">Weights</label>
+                    
+                </div>
             </div>
 
             <div class="results-container">

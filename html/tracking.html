@@ -1,12 +1,170 @@
 <!DOCTYPE html>
 
 <link rel="stylesheet" href="../css/global.css">
+<head>
+    <style>
+        h1 {
+            margin: 30px;
+        }
 
+        .checkin_container {
+            text-align: center;
+            padding-bottom: 10px;
+        }
+
+        .checkin_boxes {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .day-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .day-box {
+            width: 50px;
+            height: 50px;
+            background-color: #f0e6e9;
+            border-radius: 10px;
+            border-style:solid;
+            border-color: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        input[type="checkbox"] {
+            display: none;
+        }
+
+        input[type="checkbox"]:checked + .day-box {
+            background-color: #bdd8a1;
+            border-color: black;
+            color: white;
+            border-color:black;
+        }
+
+        .tab_container {
+            width: 560px;
+            height: 600px;
+            background-color: #f0e6e9;
+            border-radius: 20px;
+            margin: 30px auto;
+        }
+
+        .tab_select {
+            display: flex;
+            background-color: #d9d9d9;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+        .tab_select button {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 10px;
+            font-size: 16px;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+        
+        #tabBtn1.active {
+            background-color: #f0e6e9;
+            font-weight: bold;
+            border-color: transparent;
+            border-top-right-radius: 0px;
+        }
+
+        #tabBtn2.active {
+            background-color: #f0e6e9;
+            font-weight: bold;
+            border-color: transparent;
+            border-top-left-radius: 0px;
+        }
+
+        .tab_content {
+            margin-top: 10px;
+        }
+
+        .tab {
+            display: none;
+            padding: 10px;
+            background-color: #d9d9d9;
+            border-radius: 10px;
+            margin: 10px;
+        }
+
+        .tab.active {
+            display: block;
+        }
+        
+    </style>
+</head>
 <html>
     <body>
         <div class="device">
             <h1>Tracking</h1>
 
+            <div class="checkin_container">
+                <h2>Past Week</h2>
+                <div class="checkin_boxes">
+                    <label class="day-label">
+                        <input type="checkbox" name="checkin" />
+                        <div class="day-box">Sun</div>
+                    </label>
+                    <label class="day-label">
+                        <input type="checkbox" name="checkin" />
+                        <div class="day-box">Mon</div>
+                    </label>
+                    <label class="day-label">
+                        <input type="checkbox" name="checkin" />
+                        <div class="day-box">Tue</div>
+                    </label>
+                    <label class="day-label">
+                        <input type="checkbox" name="checkin" />
+                        <div class="day-box">Wed</div>
+                    </label>
+                    <label class="day-label">
+                        <input type="checkbox" name="checkin" />
+                        <div class="day-box">Thu</div>
+                    </label>
+                    <label class="day-label">
+                        <input type="checkbox" name="checkin" />
+                        <div class="day-box">Fri</div>
+                    </label>
+                    <label class="day-label">
+                        <input type="checkbox" name="checkin" />
+                        <div class="day-box">Sat</div>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="tab_container">
+                <div class="tab_select">
+                    <button onclick="selectTab(1)" id="tabBtn1" class="active">Past Week</button>
+                    <button onclick="selectTab(2)" id="tabBtn2">Meals</button>
+                </div>
+                <div class="tab_content">
+                    <div id="tab1" class="tab active">Content for Past Week</div>
+                    <div id="tab2" class="tab">Content for Meals</div>
+                </div>
+            </div>
+            
+
+            <script>
+                function selectTab(tabIndex) {
+                    document.querySelectorAll(".tab").forEach(tab => tab.classList.remove("active"));
+                    document.querySelectorAll(".tab_select button").forEach(btn => btn.classList.remove("active"));
+        
+                    document.getElementById("tab" + tabIndex).classList.add("active");
+                    document.getElementById("tabBtn" + tabIndex).classList.add("active");
+                }
+            </script>
 
 
             <div class="bottom-nav">

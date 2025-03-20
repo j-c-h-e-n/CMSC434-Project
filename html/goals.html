@@ -1,14 +1,113 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../css/global.css">
+        <style>
 
-<link rel="stylesheet" href="../css/global.css">
-
-<html>
+            .container {
+                width: 100%;
+                max-width: 560px;
+                margin: auto;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                height: 100vh;
+            }
+            .box {
+                background-color: #f0e6e9;
+                border-radius: 30px;
+                padding: 30px;
+                margin-top: 20px;
+                flex-grow: 1; 
+                overflow-y: auto;
+            }
+            .goal-input {
+                display: flex;
+                gap: 10px;
+                margin-bottom: 20px;
+            }
+            .goal-input input {
+                flex: 1;
+                padding: 10px;
+                border-radius: 10px;
+                border: 1px solid #ccc;
+            }
+            .goal-list {
+                display: flex;
+                flex-direction: column;
+            }
+            .goal-item {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                background-color: #d3d3d3;
+                padding: 10px;
+                margin: 5px 0;
+                border-radius: 10px;
+            }
+            .tabs {
+                display: flex;
+                justify-content: space-around;
+                margin-bottom: 20px;
+            }
+            .tab {
+                padding: 15px 20px;
+                background-color: #f0e6e9;
+                border-radius: 15px 15px 0 0;
+                cursor: pointer;
+                flex: 1;
+                text-align: center;
+            }
+            .active-tab {
+                background-color: #bdd8a1;
+            }
+            .active {
+                font-weight: bold;
+                color: #fff;
+            }
+            .move-button {
+                padding: 8px 15px;
+                border-radius: 10px;
+                border: none;
+                background-color: #94b472;
+                color: white;
+                font-size: 14px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+            .move-button:hover {
+                background-color: #45a049;
+            }
+            .move-button:focus {
+                outline: none;
+            }
+            .hidden {
+                display: none;
+            }
+        </style>
+    </head>
     <body>
         <div class="device">
-            <h1>Goals</h1>
-
-
-
+            <div class="container">
+                <div class="tabs">
+                    <button type="button" id="addGoalTab" class="tab active-tab" onclick="showTab('add')">Add Goal</button>
+                    <button type="button" id="completedGoalTab" class="tab" onclick="showTab('completed')">Completed Goals</button>
+                </div>
+                <div id="addGoalSection" class="box">
+                    <h2>Add a Goal</h2>
+                    <form class="goal-input" onsubmit="event.preventDefault(); addGoal();">
+                        <input type="text" id="goalText" placeholder="Enter your goal...">
+                        <button type="submit">+</button>
+                    </form>
+                    <div class="goal-list" id="goalList"></div>
+                </div>
+                <div id="completedGoalSection" class="box" style="display: none;">
+                    <h2>Completed Goals</h2>
+                    <div class="goal-list" id="completedGoalList"></div>
+                </div>
+            </div>
             <div class="bottom-nav">
                 <div class="inactive">
                     <img src="../resources/images/navbar/home.png">
@@ -32,5 +131,71 @@
                 </div>
             </div>
         </div>
+
+        <script>
+            let checkedGoals = {};
+    
+            function showTab(tab) {
+                document.getElementById('addGoalSection').style.display = tab === 'add' ? 'block' : 'none';
+                document.getElementById('completedGoalSection').style.display = tab === 'completed' ? 'block' : 'none';
+            }
+            function addGoal() {
+                const goalText = document.getElementById("goalText").value;
+                if (goalText.trim() === "") return;
+                const goals = JSON.parse(localStorage.getItem('goals')) || [];
+                goals.push({ text: goalText, completed: false });
+                localStorage.setItem('goals', JSON.stringify(goals));
+                renderActiveGoals();
+                document.getElementById("goalText").value = "";
+            }
+            function renderActiveGoals() {
+                const goalList = document.getElementById("goalList");
+                goalList.innerHTML = "";
+                const goals = JSON.parse(localStorage.getItem('goals')) || [];
+                goals.forEach((goal, index) => {
+                    if (!goal.completed) {
+                        const goalItem = document.createElement("div");
+                        goalItem.classList.add("goal-item");
+                        goalItem.innerHTML = `
+                            <input type="checkbox" id="checkbox${index}" onclick="toggleMoveButton(${index})" ${checkedGoals[index] ? 'checked' : ''}>
+                            <span>${goal.text}</span>
+                            <button type="button" id="moveButton${index}" class="move-button ${checkedGoals[index] ? '' : 'hidden'}" onclick="moveToCompleted(${index})">Move to Completed</button>
+                        `;
+                        goalList.appendChild(goalItem);
+                    }
+                });
+            }
+            function toggleMoveButton(index) {
+                const checkbox = document.getElementById(`checkbox${index}`);
+                const moveButton = document.getElementById(`moveButton${index}`);
+                checkedGoals[index] = checkbox.checked;
+                moveButton.classList.toggle('hidden', !checkbox.checked);
+            }
+            function moveToCompleted(index) {
+                const goals = JSON.parse(localStorage.getItem('goals')) || [];
+                goals[index].completed = true;
+                localStorage.setItem('goals', JSON.stringify(goals));
+                delete checkedGoals[index];
+                renderActiveGoals();
+                renderCompletedGoals();
+            }
+            function renderCompletedGoals() {
+                const completedGoalList = document.getElementById("completedGoalList");
+                completedGoalList.innerHTML = "";
+                const goals = JSON.parse(localStorage.getItem('goals')) || [];
+                goals.forEach((goal) => {
+                    if (goal.completed) {
+                        const goalItem = document.createElement("div");
+                        goalItem.classList.add("goal-item");
+                        goalItem.innerHTML = `<span>${goal.text}</span>`;
+                        completedGoalList.appendChild(goalItem);
+                    }
+                });
+            }
+            window.onload = function() {
+                renderActiveGoals();
+                renderCompletedGoals();
+            }
+        </script>
     </body>
-</html>
+    </html>

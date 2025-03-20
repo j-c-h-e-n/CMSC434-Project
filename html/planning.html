@@ -64,20 +64,71 @@
             text-wrap: nowrap;
         }
 
+        /* intensity buttons */
+
         .button-container {
             width: 560px;
-            display: flex;
-            align-items: center;
+            display: flex;            
             justify-content: space-evenly;
         }
 
+        .radiobtn {
+            position: relative;
+            display: block;
+            text-align: center;
+        }
+
+        .radiobtn label{
+            display: block;
+            border-radius: 10px;
+            padding: 15px 30px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        input[type="radio"]{
+            display: none;
+            position: absolute;
+            width: 100%;
+            appearance: none;
+        }
+
+        input[type="radio"][class="easy"] + label {
+            background: #bdd8a1;
+            border-width: 1px;
+            border: #7fa85e;
+        }
+
+        input[type="radio"][class="easy"]:checked + label {
+            background:#7fa85e;
+            box-shadow: 0 0 0 5px rgba(60, 155, 85, 0.5);
+        }
+        
+        input[type="radio"][class="medium"] + label {
+            background: #f9f4b2;
+        }
+
+        input[type="radio"][class="medium"]:checked + label {
+            background:#d1d141;
+            box-shadow: 0 0 0 5px rgba(210, 209, 65, 0.5);
+        }
+
+        input[type="radio"][class="hard"] + label {
+            background: #d88c8c;
+        }
+
+        input[type="radio"][class="hard"]:checked + label {
+            background:#b35f5f;
+            box-shadow: 0 0 0 5px rgba(179, 95, 95, 0.5);
+        }
+
+
+
 
     </style>
-
-    
-
 </head>
-
+  
 <html>
     <body>
         <div class="device">
@@ -85,25 +136,31 @@
 
             <div class="intensity-container">
                 <div class="container-title">Intensity</div>
-                <div class="button-container">
+                <form class="button-container">
                     <!-- these are radio buttons -->
-                    <input type="radio" class="" name="difficulty" id="easy"/>
-                    <label for="easy">Easy</label>
+                    <div class="radiobtn">
+                        <input type="radio" class="easy" name="difficulty" id="easy"/>
+                        <label for="easy">Easy</label>
+                    </div>
                     
-                    <input type="radio" class="" name="difficulty" id="medium"/>
-                    <label for="easy">Medium</label>
+                    <div class="radiobtn">
+                        <input type="radio" class="medium" name="difficulty" id="medium"/>
+                        <label for="medium">Medium</label>
+                    </div>
 
-                    <input type="radio" class="" name="difficulty" id="hard"/>
-                    <label for="easy">Hard</label>
-                
+                    <div class="radiobtn">
+                        <input type="radio" class="hard" name="difficulty" id="hard"/>
+                        <label for="hard">Hard</label>
+                    </div>
+
                     <!-- https://stackoverflow.com/questions/16242980/making-radio-buttons-look-like-buttons-instead -->
 
-                </div>
+                </form>
             </div>
             
             <div class="filter-container">
                 <div class="container-title">Filter By</div>
-                <div class="button-container">
+                <form class="button-container">
                     <!-- these are checkboxes -->
                     <input type="checkbox" class="" id="running">
                     <label for="running">Running</label>
@@ -117,7 +174,7 @@
                     <input type="checkbox" class="" id="weights">
                     <label for="running">Weights</label>
                     
-                </div>
+                </form>
             </div>
 
             <div class="results-container">

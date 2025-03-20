@@ -1,9 +1,102 @@
 <!DOCTYPE html>
 
-
 <head>
     <link rel="stylesheet" href="../css/global.css">
     <style>
+        h3 {
+            margin: 15px;
+        }
+
+        .workout-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+            height: 80%;
+        }
+
+        .section-button {
+            width: 200px;
+            height: 50px;
+            margin: 10px;
+            background-color: #bdd8a1;
+            border: none;
+            border-radius: 15px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .section-button:hover {
+            background-color: #7fa85e;
+        }
+
+        .main-workout-area {
+            width: 560px;
+            height: 500px;
+            background-color: #f0e6e9;
+            border-radius: 30px;
+            margin: 20px auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .empty-state p {
+            font-size: 18px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .create-workout-btn {
+            padding: 10px 20px;
+            background-color: #bdd8a1;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .past-workouts {
+            width: 560px;
+            height: 150px;
+            background-color: #f0e6e9;
+            border-radius: 30px;
+            margin: 20px auto;
+            padding: 10px;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .past-workout-card {
+            display: inline-block;
+            width: 120px;
+            height: 50px;
+            background-color: #d9d9d9;
+            border-radius: 15px;
+            margin: 0 10px;
+            text-align: center;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .workout-date {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .workout-type {
+            font-size: 14px;
+        }
     </style>
 </head>
 
@@ -12,8 +105,38 @@
         <div class="device">
             <h1>Workout</h1>
 
+            <div class="workout-container">
+                <button class="section-button">Create New Exercise</button>
+                
+                <div class="past-workouts">
+                    <h3>Past Workouts</h3>
+                    <div class="past-workout-card">
+                        <div class="workout-date">May 1, 2023</div>
+                        <div class="workout-type">Running</div>
+                    </div>
+                    <div class="past-workout-card">
+                        <div class="workout-date">April 28, 2023</div>
+                        <div class="workout-type">Weights</div>
+                    </div>
+                    <div class="past-workout-card">
+                        <div class="workout-date">April 25, 2023</div>
+                        <div class="workout-type">Yoga</div>
+                    </div>
+                    <div class="past-workout-card">
+                        <div class="workout-date">April 22, 2023</div>
+                        <div class="workout-type">Running</div>
+                    </div>
+                </div>
 
-
+                <div class="main-workout-area">
+                    <h2>Current Workout</h2>
+                    <div class="empty-state">
+                        <p>No workout exercises added yet.</p>
+                        <p>Add exercises from planning or create a new one!</p>
+                        <button class="create-workout-btn">Create Workout</button>
+                    </div>
+                </div>
+            </div>
 
             <div class="bottom-nav">
                 <div class="inactive">

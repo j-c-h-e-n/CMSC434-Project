@@ -1,146 +1,43 @@
 <!DOCTYPE html>
-<html>
+
+
 <head>
     <link rel="stylesheet" href="../css/global.css">
     <style>
-        .container {
-            width: 100%;
-            max-width: 560px;
-            margin: auto;
-            padding-bottom: 80px; 
-        }
-        .box {
-            background-color: #f0e6e9;
-            border-radius: 30px;
-            padding: 30px;
-            margin: 30px 0;
-        }
-        .button-group button {
-            margin: 5px;
-            padding: 12px 25px; 
-            border-radius: 10px;
-            border: none;
-            font-size: 18px; 
-            cursor: pointer;
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
-        }
-        .intensity .button-group button:nth-child(1) { background-color: #bdd8a1; }
-        .intensity .button-group button:nth-child(2) { background-color: #f9f4b2; }
-        .intensity .button-group button:nth-child(3) { background-color: #d88c8c; }
-
-        .filter .button-group button {
-            background-color: #d3d3d3;
-        }
-
-        .workout-list div {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #d3d3d3;
-            padding: 10px;
-            margin: 5px 0;
-            border-radius: 10px;
-        }
-        .intensity .button-group button.active {
-            background-color: #7fa85e; 
-            box-shadow: 0 0 0 5px rgba(60, 155, 85, 0.5); 
-        }
-        .intensity .button-group button:nth-child(2).active {
-            background-color: #d1d141; 
-            box-shadow: 0 0 0 5px rgba(210, 209, 65, 0.5); 
-        }
-        .intensity .button-group button:nth-child(3).active {
-            background-color: #b35f5f; 
-            box-shadow: 0 0 0 5px rgba(179, 95, 95, 0.5); 
-        }
-
-        .filter .button-group button.active {
-            background-color: #a0a0a0; 
-            box-shadow: 0 0 0 5px rgba(160, 160, 160, 0.5);
-        }
-
     </style>
 </head>
-<body>
-    <div class="device">
-        <div class="container">
+
+<html>
+    <body>
+        <div class="device">
             <h1>Workout</h1>
-            <div class="box intensity">
-                <h2>Intensity</h2>
-                <div class="button-group">
-                    <button>Easy</button>
-                    <button>Medium</button>
-                    <button>Hard</button>
+
+
+
+
+            <div class="bottom-nav">
+                <div class="inactive">
+                    <img src="../resources/images/navbar/home.png">
+                    <a href="../index.html">Home</a>
                 </div>
-            </div>
-            <div class="box filter">
-                <h2>Filter By</h2>
-                <div class="button-group">
-                    <button>Running</button>
-                    <button>Yoga</button>
-                    <button>In-Place</button>
-                    <button>Weights</button>
+                <div class="inactive">
+                    <img src="../resources/images/navbar/planning.png">
+                    <a href="./planning.html">Planning</a>
                 </div>
-            </div>
-            <div class="box workout-list">
-                <div>
-                    <span>5x20 Push Ups - Est. Time: 10 mins</span>
-                    <button>+</button>
+                <div class="active">
+                    <img src="../resources/images/navbar/workout.png">
+                    <a href="./workout.html">Workout</a>
                 </div>
-                <div>
-                    <span>4x30 Crunches - Est. Time: 8 mins</span>
-                    <button>+</button>
+                <div class="inactive">
+                    <img src="../resources/images/navbar/tracking.png">
+                    <a href="./tracking.html">Tracking</a>
                 </div>
-                <div>
-                    <span>100 Jumping Jacks - Est. Time: 30 mins</span>
-                    <button>+</button>
+                <div class="inactive">
+                    <img src="../resources/images/navbar/goals.png">
+                    <a href="./goals.html">Goals</a>
                 </div>
             </div>
         </div>
-        <div class="bottom-nav">
-            <div class="inactive">
-                <img src="../resources/images/navbar/home.png">
-                <a href="../index.html">Home</a>
-            </div>
-            <div class="inactive">
-                <img src="../resources/images/navbar/planning.png">
-                <a href="./planning.html">Planning</a>
-            </div>
-            <div class="active">
-                <img src="../resources/images/navbar/workout.png">
-                <a href="./workout.html">Workout</a>
-            </div>
-            <div class="inactive">
-                <img src="../resources/images/navbar/tracking.png">
-                <a href="./tracking.html">Tracking</a>
-            </div>
-            <div class="inactive">
-                <img src="../resources/images/navbar/goals.png">
-                <a href="./goals.html">Goals</a>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        function handleButtonSelection(event) {
-            let buttons = event.target.parentElement.querySelectorAll('button');
-            buttons.forEach(button => {
-                button.classList.remove('active');
-            });
-
-            event.target.classList.add('active');
-        }
-
-        const intensityButtons = document.querySelectorAll('.intensity .button-group button');
-        intensityButtons.forEach(button => {
-            button.addEventListener('click', handleButtonSelection);
-        });
-
-        const filterButtons = document.querySelectorAll('.filter .button-group button');
-        filterButtons.forEach(button => {
-            button.addEventListener('click', handleButtonSelection);
-        });
-    </script>
-</body>
+    </body>
 </html>
 

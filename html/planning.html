@@ -1,14 +1,8 @@
 <!DOCTYPE html>
 
-<link rel="stylesheet" href="../css/global.css">
-
-
 <head>
+    <link rel="stylesheet" href="../css/global.css">
     <style>
-        h1, h2 {
-            margin: 30px;
-        }
-
         h3 {
             margin: 20px;
         }
@@ -64,14 +58,13 @@
             text-wrap: nowrap;
         }
 
-        /* intensity buttons */
-
         .button-container {
             width: 560px;
             display: flex;            
             justify-content: space-evenly;
         }
 
+        /* intensity buttons */
         .radiobtn {
             position: relative;
             display: block;
@@ -94,36 +87,67 @@
             appearance: none;
         }
 
-        input[type="radio"][class="easy"] + label {
+        input[type="radio"][class="easybtn"] + label {
             background: #bdd8a1;
             border-width: 1px;
             border: #7fa85e;
         }
 
-        input[type="radio"][class="easy"]:checked + label {
+        input[type="radio"][class="easybtn"]:checked + label {
             background:#7fa85e;
             box-shadow: 0 0 0 5px rgba(60, 155, 85, 0.5);
         }
         
-        input[type="radio"][class="medium"] + label {
+        input[type="radio"][class="mediumbtn"] + label {
             background: #f9f4b2;
         }
 
-        input[type="radio"][class="medium"]:checked + label {
+        input[type="radio"][class="mediumbtn"]:checked + label {
             background:#d1d141;
             box-shadow: 0 0 0 5px rgba(210, 209, 65, 0.5);
         }
 
-        input[type="radio"][class="hard"] + label {
+        input[type="radio"][class="hardbtn"] + label {
             background: #d88c8c;
         }
 
-        input[type="radio"][class="hard"]:checked + label {
+        input[type="radio"][class="hardbtn"]:checked + label {
             background:#b35f5f;
             box-shadow: 0 0 0 5px rgba(179, 95, 95, 0.5);
         }
 
+        /* filter by buttons */
+        .filter-checkbox {
+            position: relative;
+            display: block;
+            text-align: center;
+        }
 
+        .filter-checkbox label {
+            display: block;
+            border-radius: 10px;
+            padding: 15px 30px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        input[type="checkbox"]{
+            display: none;
+            position: absolute;
+            width: 100%;
+            appearance: none;
+        }
+
+        
+        input[type="checkbox"][class="filter"] + label {
+            background-color: #d3d3d3;; 
+        }
+        
+        input[type="checkbox"][class="filter"]:checked + label {
+            background-color: #a0a0a0; 
+            box-shadow: 0 0 0 5px rgba(160, 160, 160, 0.5);
+        }
 
 
     </style>
@@ -139,17 +163,17 @@
                 <form class="button-container">
                     <!-- these are radio buttons -->
                     <div class="radiobtn">
-                        <input type="radio" class="easy" name="difficulty" id="easy"/>
+                        <input type="radio" class="easybtn" name="difficulty" id="easy"/>
                         <label for="easy">Easy</label>
                     </div>
                     
                     <div class="radiobtn">
-                        <input type="radio" class="medium" name="difficulty" id="medium"/>
+                        <input type="radio" class="mediumbtn" name="difficulty" id="medium"/>
                         <label for="medium">Medium</label>
                     </div>
 
                     <div class="radiobtn">
-                        <input type="radio" class="hard" name="difficulty" id="hard"/>
+                        <input type="radio" class="hardbtn" name="difficulty" id="hard"/>
                         <label for="hard">Hard</label>
                     </div>
 
@@ -162,17 +186,25 @@
                 <div class="container-title">Filter By</div>
                 <form class="button-container">
                     <!-- these are checkboxes -->
-                    <input type="checkbox" class="" id="running">
-                    <label for="running">Running</label>
+                    <div class="filter-checkbox">
+                        <input type="checkbox" class="filter" id="running">
+                        <label for="running">Running</label>
+                    </div>
+                    
+                    <div class="filter-checkbox">
+                        <input type="checkbox" class="filter" id="inplace">
+                        <label for="inplace">In-Place</label>
+                    </div>
 
-                    <input type="checkbox" class="" id="inplace">
-                    <label for="running">In-Place</label>
+                    <div class="filter-checkbox">
+                        <input type="checkbox" class="filter" id="yoga">
+                        <label for="yoga">Yoga</label>
+                    </div>
 
-                    <input type="checkbox" class="" id="yoga">
-                    <label for="running">Yoga</label>
-
-                    <input type="checkbox" class="" id="weights">
-                    <label for="running">Weights</label>
+                    <div class="filter-checkbox">
+                        <input type="checkbox" class="filter" id="weights">
+                        <label for="weights">Weights</label>
+                    </div>
                     
                 </form>
             </div>

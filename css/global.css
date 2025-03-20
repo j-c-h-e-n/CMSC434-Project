@@ -5,8 +5,9 @@
 }
 
 /* applying Roboto across the elements we use */
-h1 {
+h1, h2 {
     font-family: 'Roboto';
+    margin: 30px;
 }
 
 div {
@@ -28,6 +29,7 @@ div {
 
 .bottom-nav {
     margin: auto;
+    height: 80px;
     width: 640px;
     display: flex;
     justify-content: space-around;

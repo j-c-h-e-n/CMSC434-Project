@@ -73,6 +73,62 @@
         background-color: #f0e6e9;
         border-radius: 30px;
     }
+
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-content {
+        background: #f0e6e9;
+        padding: 20px;
+        border-radius: 8px;
+        width: 300px;
+        text-align: center;
+        position: relative;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .close {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        font-size: 20px;
+    }
+
+    select {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid black;
+        border-radius: 5px;
+        font-size: 16px;
+        background-color: #fff6f4;
+    }
+
+    select:focus {
+        border-color: #bdd8a1;
+        outline: none;
+    }
+
+    label {
+        font-weight: bold;
+        display: block;
+        margin-top: 10px;
+        text-align: left;
+    }
+    #saveButton {
+        background-color: #fff6f4;
+        border: 1px solid black;
+        border-radius: 10px;
+    }
     </style>
 </head>
 
@@ -81,17 +137,16 @@
         <div class="device">
             <h1>Home</h1>
             <div class="profile">
-                
                 <img src="./resources/images/homepage/profile_icon.png" alt="">
                 <div class="profile_text">
                     <h3>Welcome User!</h3>
-                    <p>Experience: TBD</p>
-                    <p>Age: TBD</p>
+                    <p>Experience: <span id="experience">Unknown</span></p>
+                    <p>Age: <span id="age">Unknown</span></p>
                 </div>
-                <button class="edit_btn">
-                    <p>Edit</p>
-                </button>
+                <button class="edit_btn">Edit</button>
             </div>
+            
+
             <h2>Shortcuts</h2>
             <div class="shortcut_container">
                 <div class="shortcut">
@@ -107,10 +162,12 @@
                     <p>Meals</p>
                 </div>
             </div>
+
             <h2>Tracking</h2>
             <div class="graph">
 
             </div>
+
             <div class="bottom-nav">
                 <div class="active">
                     <img src="./resources/images/navbar/home.png">
@@ -134,5 +191,63 @@
                 </div>
             </div>
         </div>
+
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <span class="close">x</span>
+                <h3>Edit Profile</h2>
+                <label for="experienceInput">Experience:</label>
+                <select id="experienceInput">
+                    <option value="Beginner">Beginner(New)</option>
+                    <option value="Intermediate">Intermediate(1-3 Years)</option>
+                    <option value="Advanced">Advanced(3+ Years)</option>
+                </select>
+
+                <label for="ageInput">Age:</label>
+                <select id="ageInput">
+                    <option value="Under 18">Under 18</option>
+                    <option value="18-24">18-24</option>
+                    <option value="25-34">25-34</option>
+                    <option value="35-44">35-44</option>
+                    <option value="45-54">45-54</option>
+                    <option value="55-64">55-64</option>
+                    <option value="65+">65+</option>
+                </select>
+
+                
+                <button id="saveButton">Save</button>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+            const modal = document.getElementById("modal");
+            const editButton = document.querySelector(".edit_btn");
+            const closeButton = document.querySelector(".close");
+            const saveButton = document.getElementById("saveButton");
+
+            const experienceSpan = document.getElementById("experience");
+            const ageSpan = document.getElementById("age");
+
+            const experienceInput = document.getElementById("experienceInput");
+            const ageInput = document.getElementById("ageInput");
+
+            editButton.addEventListener("click", function () {
+                modal.style.display = "flex";
+            });
+
+            closeButton.addEventListener("click", function () {
+                modal.style.display = "none";
+            });
+
+            saveButton.addEventListener("click", function () {
+                experienceSpan.textContent = experienceInput.value;
+                ageSpan.textContent = ageInput.value;
+                modal.style.display = "none";
+            });
+        });
+
+        </script>
     </body>
+
 </html>

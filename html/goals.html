@@ -197,15 +197,12 @@
 
     <script>
         function showTab(tab) {
-            // Show the correct tab
             document.getElementById('addGoalSection').style.display = tab === 'add' ? 'block' : 'none';
             document.getElementById('completedGoalSection').style.display = tab === 'completed' ? 'block' : 'none';
     
-            // Update active tab styling
             document.getElementById('addGoalTab').classList.toggle('active-tab', tab === 'add');
             document.getElementById('completedGoalTab').classList.toggle('active-tab', tab === 'completed');
     
-            // Call render functions when switching tabs
             if (tab === 'add') {
                 renderActiveGoals();
             } else if (tab === 'completed') {

@@ -5,8 +5,9 @@
 }
 
 /* applying Roboto across the elements we use */
-h1 {
+h1, h2 {
     font-family: 'Roboto';
+    margin: 30px;
 }
 
 div {

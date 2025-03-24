@@ -1,9 +1,142 @@
 <!DOCTYPE html>
 
-
 <head>
     <link rel="stylesheet" href="../css/global.css">
     <style>
+        h1 {
+            margin: 30px;
+        }
+        
+        h3 {
+            margin: 20px;
+        }
+
+        .workout-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .section-button {
+            width: 200px;
+            height: 50px;
+            margin-bottom: 40px;
+            background-color: #bdd8a1;
+            border: none;
+            border-radius: 15px;
+            font-size: 16px;
+            font-weight: normal;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .section-button:hover {
+            background-color: #7fa85e;
+        }
+
+        .main-workout-area {
+            width: 560px;
+            height: 400px;
+            background-color: #f0e6e9;
+            border-radius: 30px;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            align-content: flex-start;
+            padding: 0;
+            box-sizing: border-box;
+            position: relative;
+        }
+        
+        .main-workout-title {
+            font-size: 1.5em;
+            margin: 20px;
+            text-wrap: nowrap;
+        }
+
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: absolute;
+            top: 55%;
+            left: 0;
+            right: 0;
+            transform: translateY(-70%);
+            width: 100%;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+
+        .empty-state p {
+            font-size: 18px;
+            margin: 10px 0;
+            color: #666;
+        }
+
+        .create-workout-btn {
+            padding: 12px 25px;
+            background-color: #bdd8a1;
+            border: none;
+            border-radius: 15px;
+            font-size: 16px;
+            font-weight: normal;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .create-workout-btn:hover {
+            background-color: #7fa85e;
+        }
+
+        .past-workouts {
+            width: 560px;
+            height: 150px;
+            background-color: #f0e6e9;
+            border-radius: 30px;
+            margin: auto;
+            padding: 0;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-content: flex-start;
+            position: relative;
+        }
+        
+        .past-workouts + .main-workout-area {
+            margin-top: 40px;
+        }
+        
+        .past-workouts-title {
+            font-size: 1.5em;
+            margin: 20px;
+            text-wrap: nowrap;
+        }
+        
+        .past-workouts-empty {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            transform: translateY(-30%);
+            width: 100%;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+        
+        .past-workouts-empty p {
+            font-size: 16px;
+            color: #666;
+            margin: 5px 0;
+        }
     </style>
 </head>
 
@@ -12,8 +145,26 @@
         <div class="device">
             <h1>Workout</h1>
 
+            <div class="workout-container">
+                <button class="section-button">Create New Exercise</button>
+                
+                <div class="past-workouts">
+                    <div class="past-workouts-title">Past Workouts</div>
+                    <div class="past-workouts-empty">
+                        <p>No past workouts found.</p>
+                        <p>Create your first workout to see it here!</p>
+                    </div>
+                </div>
 
-
+                <div class="main-workout-area">
+                    <div class="main-workout-title">Current Workout</div>
+                    <div class="empty-state">
+                        <p>No workout exercises added yet.</p>
+                        <p>Add exercises from planning or create a new one!</p>
+                        <button class="create-workout-btn">Create Workout</button>
+                    </div>
+                </div>
+            </div>
 
             <div class="bottom-nav">
                 <div class="inactive">

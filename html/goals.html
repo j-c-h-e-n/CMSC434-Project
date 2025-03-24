@@ -1,36 +1,313 @@
 <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/global.css">
+    <style>
+        .container {
+            width: 100%;
+            max-width: 560px;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            height: 100vh;
+        }
+        .box {
+            background-color: #f0e6e9;
+            border-radius: 30px;
+            padding: 30px;
+            margin-top: 20px;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+        h2 {
+            text-align: left;
+        }
+        .goal-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .goal-input input, .goal-input select {
+            flex: 1;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+        }
+        .goal-input button {
+            padding: 10px;
+            background-color: #94b472;
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        .goal-list {
+            display: flex;
+            flex-direction: column;
+        }
+        .goal-item, .detailed-goal-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #d3d3d3;
+            padding: 15px;
+            margin: 5px 0;
+            border-radius: 10px;
+            transition: opacity 0.5s ease-out;
+            flex-wrap: wrap;
+        }
+        .goal-item span, .detailed-goal-item span {
+            flex: 1;
+            text-align: left;
+        }
+        .goal-details {
+            font-size: 14px;
+            color: #555;
+            margin-top: 5px;
+        }
+        .tabs {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        .tab {
+            padding: 15px 20px;
+            background-color: #f0e6e9;
+            border-radius: 15px 15px 0 0;
+            cursor: pointer;
+            flex: 1;
+            text-align: center;
+            transition: background-color 0.3s ease;
+            border: none;
+        }
+        .active-tab {
+            background-color: #bdd8a1;
+            color: black;
+            font-weight: bold;
+        }
+        .move-button {
+            padding: 8px 15px;
+            border-radius: 10px;
+            border: none;
+            background-color: #94b472;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .move-button:hover {
+            background-color: #45a049;
+        }
+        .move-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #4CAF50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .move-icon:hover {
+            background-color: #45a049;
+        }
+        .move-icon:before {
+            content: '✓';
+            font-size: 20px;
+            color: white;
+        }
+        .detailed-goal-form {
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .detailed-goal-form input, .detailed-goal-form select {
+            flex: 1;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+        }
+        .fade-out {
+            opacity: 0;
+            transition: opacity 0.5s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="device">
+        <div class="container">
+            <div class="tabs">
+                <button type="button" id="addGoalTab" class="tab active-tab" onclick="showTab('add')">Add Goal</button>
+                <button type="button" id="completedGoalTab" class="tab" onclick="showTab('completed')">Completed Goals</button>
+            </div>
+            <div id="addGoalSection" class="box">
+                <h2>Add a Goal</h2>
+                <form class="goal-input" onsubmit="event.preventDefault(); addGoal();">
+                    <input type="text" id="goalText" placeholder="Enter your goal...">
+                    <button type="submit">+</button>
+                </form>
+                <button type="button" class="move-button" onclick="toggleDetailedGoalForm()">Set Detailed Goal</button>
 
-<link rel="stylesheet" href="../css/global.css">
+                <div class="detailed-goal-form" id="detailedGoalForm">
+                    <input type="text" id="detailedGoalText" placeholder="Enter goal description...">
+                    <select id="goalType">
+                        <option value="Exercise">Exercise</option>
+                        <option value="Weight">Weight</option>
+                        <option value="Nutrition">Nutrition</option>
+                        <option value="Consistency">Consistency</option>
+                    </select>
+                    <input type="date" id="targetDate">
+                    <button type="button" class="move-button" onclick="addDetailedGoal()">Add Detailed Goal</button>
+                </div>
 
-<html>
-    <body>
-        <div class="device">
-            <h1>Goals</h1>
-
-
-
-            <div class="bottom-nav">
-                <div class="inactive">
-                    <img src="../resources/images/navbar/home.png">
-                    <a href="../index.html">Home</a>
-                </div>
-                <div class="inactive">
-                    <img src="../resources/images/navbar/planning.png">
-                    <a href="./planning.html">Planning</a>
-                </div>
-                <div class="inactive">
-                    <img src="../resources/images/navbar/workout.png">
-                    <a href="./workout.html">Workout</a>
-                </div>
-                <div class="inactive">
-                    <img src="../resources/images/navbar/tracking.png">
-                    <a href="./tracking.html">Tracking</a>
-                </div>
-                <div class="active">
-                    <img src="../resources/images/navbar/goals.png">
-                    <a href="./goals.html">Goals</a>
-                </div>
+                <div class="goal-list" id="goalList"></div>
+            </div>
+            <div id="completedGoalSection" class="box" style="display: none;">
+                <h2>Completed Goals</h2>
+                <div class="goal-list" id="completedGoalList"></div>
             </div>
         </div>
-    </body>
+        <div class="bottom-nav">
+            <div class="inactive">
+                <img src="../resources/images/navbar/home.png">
+                <a href="../index.html">Home</a>
+            </div>
+            <div class="inactive">
+                <img src="../resources/images/navbar/planning.png">
+                <a href="./planning.html">Planning</a>
+            </div>
+            <div class="inactive">
+                <img src="../resources/images/navbar/workout.png">
+                <a href="./workout.html">Workout</a>
+            </div>
+            <div class="inactive">
+                <img src="../resources/images/navbar/tracking.png">
+                <a href="./tracking.html">Tracking</a>
+            </div>
+            <div class="active">
+                <img src="../resources/images/navbar/goals.png">
+                <a href="./goals.html">Goals</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tab) {
+            document.getElementById('addGoalSection').style.display = tab === 'add' ? 'block' : 'none';
+            document.getElementById('completedGoalSection').style.display = tab === 'completed' ? 'block' : 'none';
+    
+            document.getElementById('addGoalTab').classList.toggle('active-tab', tab === 'add');
+            document.getElementById('completedGoalTab').classList.toggle('active-tab', tab === 'completed');
+    
+            if (tab === 'add') {
+                renderActiveGoals();
+            } else if (tab === 'completed') {
+                renderCompletedGoals();
+            }
+        }
+    
+        function toggleDetailedGoalForm() {
+            const form = document.getElementById('detailedGoalForm');
+            form.style.display = form.style.display === 'none' || form.style.display === '' ? 'flex' : 'none';
+        }
+    
+        function addGoal() {
+            const goalText = document.getElementById("goalText").value;
+    
+            if (goalText.trim() === "") return;
+    
+            const goal = {
+                text: goalText,
+                completed: false,
+                type: 'simple'
+            };
+    
+            const goals = JSON.parse(localStorage.getItem('goals')) || [];
+            goals.push(goal);
+            localStorage.setItem('goals', JSON.stringify(goals));
+            renderActiveGoals();
+            document.getElementById("goalText").value = "";
+        }
+    
+        function addDetailedGoal() {
+            const detailedGoalText = document.getElementById("detailedGoalText").value;
+            const goalType = document.getElementById("goalType").value;
+            const targetDate = document.getElementById("targetDate").value;
+    
+            if (detailedGoalText.trim() === "") return;
+    
+            const goal = {
+                text: detailedGoalText,
+                completed: false,
+                type: 'detailed',
+                category: goalType,
+                date: targetDate
+            };
+    
+            const goals = JSON.parse(localStorage.getItem('goals')) || [];
+            goals.push(goal);
+            localStorage.setItem('goals', JSON.stringify(goals));
+            renderActiveGoals();
+    
+            document.getElementById("detailedGoalText").value = "";
+            document.getElementById("targetDate").value = "";
+            toggleDetailedGoalForm();
+        }
+    
+        function moveToCompleted(index, button) {
+            const goals = JSON.parse(localStorage.getItem('goals')) || [];
+            goals[index].completed = true;
+            localStorage.setItem('goals', JSON.stringify(goals));
+    
+            const goalElement = button.parentElement;
+            goalElement.classList.add("fade-out");
+    
+            setTimeout(() => {
+                renderActiveGoals();
+                renderCompletedGoals();
+            }, 500);
+        }
+    
+        function renderActiveGoals() {
+            const goalList = document.getElementById("goalList");
+            goalList.innerHTML = "";
+            const goals = JSON.parse(localStorage.getItem('goals')) || [];
+            goals.forEach((goal, index) => {
+                if (!goal.completed) {
+                    const goalItem = document.createElement("div");
+                    goalItem.classList.add(goal.type === 'detailed' ? "detailed-goal-item" : "goal-item");
+                    goalItem.innerHTML = `
+                        <span>${goal.text}</span>
+                        ${goal.type === 'detailed' ? `<div class="goal-details">${goal.category} | Target Date: ${goal.date}</div>` : ''}
+                        <div class="move-icon" onclick="moveToCompleted(${index}, this)"></div>
+                    `;
+                    goalList.appendChild(goalItem);
+                }
+            });
+        }
+    
+        function renderCompletedGoals() {
+            const completedGoalList = document.getElementById("completedGoalList");
+            completedGoalList.innerHTML = "";
+            const goals = JSON.parse(localStorage.getItem('goals')) || [];
+            goals.forEach((goal, index) => {
+                if (goal.completed) {
+                    const goalItem = document.createElement("div");
+                    goalItem.classList.add(goal.type === 'detailed' ? "detailed-goal-item" : "goal-item");
+                    goalItem.innerHTML = `
+                        <span>${goal.text}</span>
+                        ${goal.type === 'detailed' ? `<div class="goal-details">${goal.category} | Target Date: ${goal.date}</div>` : ''}
+                    `;
+                    completedGoalList.appendChild(goalItem);
+                }
+            });
+        }
+    
+        window.onload = renderActiveGoals; 
+    </script>    
+</body>
 </html>

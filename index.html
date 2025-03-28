@@ -102,6 +102,26 @@
         right: 15px;
         font-size: 20px;
     }
+    
+    .shortcut img {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 20px;
+        height: 110px;
+        width: 110px;
+    }
+
+    .shortcut a {
+        position: absolute;
+        display: block;
+        height: 150px;
+        width: 150px;
+        top: 315px; /* jank but we'll roll with it */
+        z-index: 3;
+        font-size: 0;
+        align-content: center;
+    }
 
     select {
         width: 100%;
@@ -148,17 +168,27 @@
             
 
             <h2>Shortcuts</h2>
+            <!-- the text for anchor links will just be set to font-size: 0-->
             <div class="shortcut_container">
                 <div class="shortcut">
-                    <div class="new_workout"></div>
+                    <div class="new_workout">
+                        <img src="./resources/images/homepage/new_workout.png">
+                        <a href="./html/planning.html">New Workout</a>
+                    </div>
                     <p>New Workout</p>
                 </div>
                 <div class="shortcut">
-                    <div class="past_workout"></div>
+                    <div class="past_workout">
+                        <img src="./resources/images/homepage/past_workouts.png">
+                        <a href="./html/tracking.html">Past Workout</a>
+                    </div>
                     <p>Past Workouts</p>
                 </div>
                 <div class="shortcut">
-                    <div class="meals"></div>
+                    <div class="meals">
+                        <img src="./resources/images/homepage/meals.png">
+                        <a href="./html/tracking.html">Meals</a>
+                    </div>
                     <p>Meals</p>
                 </div>
             </div>

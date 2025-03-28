@@ -5,7 +5,7 @@
 <head>
     <style>
       .profile {
-        height: 150px;
+        height: 180px;  
         width: 560px;
         margin: auto;
         background-color: #f0e6e9;
@@ -13,17 +13,30 @@
         display: flex;
       }
       .profile img {
-        height: 75%;
+        height: 65%;
         align-self: center;
         margin: 10px 30px;
       }
       .profile_text {
-        height: 75%;
+        height: 100%;  
         width: 50%;
-        margin: 0px 20px;
+        margin: 20px 0;  
       }
-      .profile_text h3{
+      .profile_text h3 {
         text-align: center;
+        margin: 0 0 8px 0; 
+        font-size: 18px;  
+      }
+      .profile_text p {
+        margin: 6px 0;  
+        font-size: 14px;  
+        line-height: 1.2;  
+      }
+      .status_text {
+        display: grid; 
+        width:300px;
+        grid-template-columns: 1fr 1fr;
+        gap: 0px 20px; 
       }
       .edit_btn {
         margin: 10px;
@@ -37,7 +50,7 @@
         justify-content: center; 
         align-items: center; 
         text-align: center;
-    }
+      }
 
     .shortcut_container {
         height: 150px;
@@ -144,6 +157,21 @@
         outline: none;
     }
 
+    input[type="number"] {
+        width: 280px; 
+        padding: 10px; 
+        margin: 10px 0; 
+        border: 1px solid black; 
+        border-radius: 5px; 
+        font-size: 16px; 
+        background-color: #fff6f4; 
+    }
+
+    input[type="number"]:focus {
+        border-color: #bdd8a1;
+        outline: none; 
+    }
+
     label {
         font-weight: bold;
         display: block;
@@ -154,6 +182,14 @@
         background-color: #fff6f4;
         border: 1px solid black;
         border-radius: 10px;
+    }
+
+    body.modal-open {
+        pointer-events: none; 
+    }
+
+    .modal {
+        pointer-events: auto; 
     }
     </style>
 </head>
@@ -166,8 +202,13 @@
                 <img src="./resources/images/homepage/profile_icon.png" alt="">
                 <div class="profile_text">
                     <h3>Welcome User!</h3>
-                    <p>Experience: <span id="experience">Unknown</span></p>
-                    <p>Age: <span id="age">Unknown</span></p>
+                    <div class="status_text">
+                        <p>Experience: <span id="experience">Unknown</span></p>
+                        <p>Age: <span id="age">Unknown</span></p>
+                        <p>Weight: <span id="weight">Unknown</span></p>
+                        <p>Height: <span id="height">Unknown</span></p>
+                        <p>Gender: <span id="gender">Unknown</span></p>
+                    </div> 
                 </div>
                 <button class="edit_btn">Edit</button>
             </div>
@@ -239,17 +280,21 @@
                     <option value="Advanced">Advanced(3+ Years)</option>
                 </select>
 
-                <label for="ageInput">Age:</label>
-                <select id="ageInput">
-                    <option value="Under 18">Under 18</option>
-                    <option value="18-24">18-24</option>
-                    <option value="25-34">25-34</option>
-                    <option value="35-44">35-44</option>
-                    <option value="45-54">45-54</option>
-                    <option value="55-64">55-64</option>
-                    <option value="65+">65+</option>
-                </select>
+                <label for="ageInput">Age (years):</label>
+                <input type="number" id="ageInput" placeholder="Enter your age" min="1" max="120" step="1">
 
+                <label for="weightInput">Weight (lbs):</label>
+                <input type="number" id="weightInput" placeholder="Enter your weight" min="1" max="999" step="1">
+
+                <label for="heightInput">Height (inches):</label>
+                <input type="number" id="heightInput" placeholder="Enter your height in inches" min="36" max="96" step="1">
+
+                <label for="genderInput">Gender:</label>
+                <select id="genderInput">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
                 
                 <button id="saveButton">Save</button>
             </div>
@@ -257,32 +302,67 @@
 
         <script>
             document.addEventListener("DOMContentLoaded", function () {
-            const modal = document.getElementById("modal");
-            const editButton = document.querySelector(".edit_btn");
-            const closeButton = document.querySelector(".close");
-            const saveButton = document.getElementById("saveButton");
+                const modal = document.getElementById("modal");
+                const editButton = document.querySelector(".edit_btn");
+                const closeButton = document.querySelector(".close");
+                const saveButton = document.getElementById("saveButton");
 
-            const experienceSpan = document.getElementById("experience");
-            const ageSpan = document.getElementById("age");
+                const experienceSpan = document.getElementById("experience");
+                const ageSpan = document.getElementById("age");
+                const weightSpan = document.getElementById("weight");
+                const heightSpan = document.getElementById("height");
+                const genderSpan = document.getElementById("gender");
 
-            const experienceInput = document.getElementById("experienceInput");
-            const ageInput = document.getElementById("ageInput");
+                const experienceInput = document.getElementById("experienceInput");
+                const ageInput = document.getElementById("ageInput");
+                const weightInput = document.getElementById("weightInput");
+                const heightInput = document.getElementById("heightInput");
+                const genderInput = document.getElementById("genderInput");
 
-            editButton.addEventListener("click", function () {
-                modal.style.display = "flex";
+                editButton.addEventListener("click", function () {
+                    modal.style.display = "flex";
+                    document.body.classList.add("modal-open"); 
+                });
+
+                closeButton.addEventListener("click", function () {
+                    modal.style.display = "none";
+                    document.body.classList.remove("modal-open"); 
+                });
+
+                saveButton.addEventListener("click", function () {
+
+                    experienceSpan.textContent = experienceInput.value;
+
+                    if (ageInput.value.trim() === "") {
+                        ageSpan.textContent = "Unknown";
+                    } else {
+                        ageSpan.textContent = ageInput.value + " yrs";
+                    }
+
+
+                    if (weightInput.value.trim() === "") {
+                        weightSpan.textContent = "Unknown";
+                    } else {
+                        weightSpan.textContent = weightInput.value + " lbs";
+                    }
+
+                    const totalInches = parseInt(heightInput.value, 10);
+                    if (!isNaN(totalInches) && heightInput.value.trim() !== "") {
+                        const feet = Math.floor(totalInches / 12);
+                        const inches = totalInches % 12;
+                        heightSpan.textContent = `${feet}'${inches}"`;
+                    } else {
+                        heightSpan.textContent = "Unknown";
+                    }
+
+
+                    genderSpan.textContent = genderInput.value;
+
+
+                    modal.style.display = "none";
+                    document.body.classList.remove("modal-open");
+                });
             });
-
-            closeButton.addEventListener("click", function () {
-                modal.style.display = "none";
-            });
-
-            saveButton.addEventListener("click", function () {
-                experienceSpan.textContent = experienceInput.value;
-                ageSpan.textContent = ageInput.value;
-                modal.style.display = "none";
-            });
-        });
-
         </script>
     </body>
 

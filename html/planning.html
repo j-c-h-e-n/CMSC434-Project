@@ -22,6 +22,7 @@
             display: flex;
             flex-wrap: wrap;
             align-content: flex-start; /* THIS FIXES THE DAMN BLANK SPACE THAT HAPPENS BELOW FLEX CONTAINERS */
+            position: relative; /* Add this for clear button positioning */
         }
 
         .intensity-container + .filter-container {
@@ -50,6 +51,8 @@
             background-color: #f0e6e9;
             border-radius: 30px;
             display: flex;
+            flex-direction: column;
+            overflow-y: auto;
         }
         
         .container-title {
@@ -149,6 +152,99 @@
             box-shadow: 0 0 0 5px rgba(160, 160, 160, 0.5);
         }
 
+        /* Exercise display styles */
+        .exercise-list {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+
+        .exercise-item {
+            background-color: #fff6f4;
+            border-radius: 15px;
+            padding: 15px;
+            margin: 8px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .exercise-info {
+            flex-grow: 1;
+        }
+
+        .exercise-name {
+            font-weight: bold;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .exercise-details {
+            font-size: 14px;
+            color: #666;
+            margin-top: 6px;
+        }
+
+        .exercise-difficulty {
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+            margin-right: 5px;
+            display: inline-block;
+        }
+
+        .difficulty-Easy {
+            background-color: #bdd8a1;
+            color: #2c3e50;
+        }
+
+        .difficulty-Medium {
+            background-color: #f9f4b2;
+            color: #2c3e50;
+        }
+
+        .difficulty-Hard {
+            background-color: #d88c8c;
+            color: #2c3e50;
+        }
+
+        .exercise-type {
+            background-color: #f0e6e9;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+            color: #2c3e50;
+            display: inline-block;
+        }
+
+        .add-exercise-btn {
+            background-color: #bdd8a1;
+            border: none;
+            border-radius: 15px;
+            padding: 8px 15px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .add-exercise-btn:hover {
+            background-color: #7fa85e;
+            color: #fff;
+        }
+
+        .no-results {
+            text-align: center;
+            margin: 20px;
+            color: #666;
+            background-color: #f0e6e9;
+            padding: 15px;
+            border-radius: 15px;
+        }
+
 
     </style>
 </head>
@@ -163,22 +259,19 @@
                 <form class="button-container">
                     <!-- these are radio buttons -->
                     <div class="radiobtn">
-                        <input type="radio" class="easybtn" name="difficulty" id="easy"/>
+                        <input type="radio" class="easybtn" name="difficulty" id="easy" value="Easy"/>
                         <label for="easy">Easy</label>
                     </div>
                     
                     <div class="radiobtn">
-                        <input type="radio" class="mediumbtn" name="difficulty" id="medium"/>
+                        <input type="radio" class="mediumbtn" name="difficulty" id="medium" value="Medium"/>
                         <label for="medium">Medium</label>
                     </div>
 
                     <div class="radiobtn">
-                        <input type="radio" class="hardbtn" name="difficulty" id="hard"/>
+                        <input type="radio" class="hardbtn" name="difficulty" id="hard" value="Hard"/>
                         <label for="hard">Hard</label>
                     </div>
-
-                    <!-- https://stackoverflow.com/questions/16242980/making-radio-buttons-look-like-buttons-instead -->
-
                 </form>
             </div>
             
@@ -187,22 +280,17 @@
                 <form class="button-container">
                     <!-- these are checkboxes -->
                     <div class="filter-checkbox">
-                        <input type="checkbox" class="filter" id="running">
-                        <label for="running">Running</label>
+                        <input type="checkbox" class="filter" id="cardio" value="Cardio">
+                        <label for="cardio">Cardio</label>
                     </div>
                     
                     <div class="filter-checkbox">
-                        <input type="checkbox" class="filter" id="inplace">
-                        <label for="inplace">In-Place</label>
+                        <input type="checkbox" class="filter" id="bodyweight" value="Bodyweight">
+                        <label for="bodyweight">Bodyweight</label>
                     </div>
 
                     <div class="filter-checkbox">
-                        <input type="checkbox" class="filter" id="yoga">
-                        <label for="yoga">Yoga</label>
-                    </div>
-
-                    <div class="filter-checkbox">
-                        <input type="checkbox" class="filter" id="weights">
+                        <input type="checkbox" class="filter" id="weights" value="Weights">
                         <label for="weights">Weights</label>
                     </div>
                     
@@ -210,7 +298,10 @@
             </div>
 
             <div class="results-container">
-                <!-- probably some javascript to retrieve results and stuff from filters -->
+                <div class="container-title">Results</div>
+                <div class="exercise-list" id="exercise-list">
+                    <!-- Exercise items will be populated here -->
+                </div>
             </div>
 
             <div class="bottom-nav">
@@ -236,5 +327,132 @@
                 </div>
             </div>
         </div>
+
+        <script>
+            // Load exercises data
+            let allExercises = [];
+            let filteredExercises = [];
+
+            // Function to fetch and load exercises data
+            async function loadExercises() {
+                try {
+                    const response = await fetch('../resources/exercises.json');
+                    const data = await response.json();
+                    allExercises = data.exercises;
+                    filteredExercises = [...allExercises]; // Create a copy
+                    displayExercises(filteredExercises);
+                } catch (error) {
+                    console.error('Error loading exercises:', error);
+                    document.getElementById('exercise-list').innerHTML = '<div class="no-results">Error loading exercises</div>';
+                }
+            }
+
+            // Function to display exercises in the results container
+            function displayExercises(exercises) {
+                const exerciseList = document.getElementById('exercise-list');
+                exerciseList.innerHTML = '';
+
+                if (exercises.length === 0) {
+                    exerciseList.innerHTML = '<div class="no-results">No exercises match your filters</div>';
+                    return;
+                }
+
+                exercises.forEach(exercise => {
+                    const exerciseItem = document.createElement('div');
+                    exerciseItem.className = 'exercise-item';
+                    exerciseItem.innerHTML = `
+                        <div class="exercise-info">
+                            <div class="exercise-name">${exercise.name}</div>
+                            <div class="exercise-details">
+                                <span class="difficulty-${exercise.difficulty} exercise-difficulty">${exercise.difficulty}</span>
+                                <span class="exercise-type">${exercise.type}</span>
+                                <span>${exercise.caloriesPerMinute} cal/min</span>
+                            </div>
+                        </div>
+                        <button class="add-exercise-btn" data-id="${exercise.id}">Add</button>
+                    `;
+                    exerciseList.appendChild(exerciseItem);
+                });
+
+                // Add event listeners to Add buttons
+                document.querySelectorAll('.add-exercise-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const exerciseId = this.getAttribute('data-id');
+                        addExerciseToWorkout(exerciseId);
+                    });
+                });
+            }
+
+            // Function to add exercise to workout (placeholder for now)
+            function addExerciseToWorkout(exerciseId) {
+                // This would be implemented later to add the exercise to the user's workout
+                alert(`Exercise ${exerciseId} added to workout!`);
+            }
+
+            // Function to filter exercises based on selected filters
+            function filterExercises() {
+                // Get selected difficulty (might be undefined if none selected)
+                const selectedDifficultyElement = document.querySelector('input[name="difficulty"]:checked');
+                const selectedDifficulty = selectedDifficultyElement ? selectedDifficultyElement.value : null;
+                
+                // Get selected types
+                const selectedTypes = [];
+                document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
+                    selectedTypes.push(checkbox.value);
+                });
+
+                // Filter exercises
+                filteredExercises = allExercises.filter(exercise => {
+                    // Apply difficulty filter if one is selected
+                    const difficultyMatch = !selectedDifficulty || exercise.difficulty === selectedDifficulty;
+                    
+                    // Apply type filter if any types are selected
+                    const typeMatch = selectedTypes.length === 0 || selectedTypes.includes(exercise.type);
+                    
+                    return difficultyMatch && typeMatch;
+                });
+
+                // Display filtered exercises
+                displayExercises(filteredExercises);
+            }
+
+            // Use a variable to track the currently selected radio
+            let currentlySelectedRadio = null;
+
+            // Add label click handlers for difficulty buttons instead of radio change events
+            document.querySelectorAll('.radiobtn label').forEach(label => {
+                label.addEventListener('click', function(e) {
+                    // Prevent default behavior to manually handle radio toggling
+                    e.preventDefault();
+                    
+                    // Get the associated radio input
+                    const radioId = this.getAttribute('for');
+                    const radioInput = document.getElementById(radioId);
+                    
+                    // If clicking the currently selected radio
+                    if (radioInput === currentlySelectedRadio && radioInput.checked) {
+                        // Uncheck it
+                        radioInput.checked = false;
+                        currentlySelectedRadio = null;
+                    } else {
+                        // Otherwise select it and update tracking
+                        radioInput.checked = true;
+                        currentlySelectedRadio = radioInput;
+                    }
+                    
+                    // Run filtering
+                    filterExercises();
+                });
+            });
+
+            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                checkbox.addEventListener('change', filterExercises);
+            });
+
+            // Load exercises when page loads
+            window.addEventListener('DOMContentLoaded', function() {
+                loadExercises();
+            });
+        </script>
     </body>
 </html>

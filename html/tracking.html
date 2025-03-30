@@ -32,17 +32,24 @@
             justify-content: center;
             font-weight: bold;
             transition: background-color 0.3s ease-in-out;
+            cursor: pointer;
         }
 
-        input[type="checkbox"] {
-            display: none;
+        input[type="radio"] {
+            display: none; 
         }
 
-        input[type="checkbox"]:checked + .day-box {
-            background-color: #bdd8a1;
+        input[type="radio"]:checked + .day-box {
             border-color: black;
-            color: white;
-            border-color:black;
+        }
+
+        .day-box.has-data {
+            background-color: #bdd8a1;
+            color: black;
+        }
+
+        .day-box.no-data {
+            background-color: #d9d9d9;
         }
 
         .tab_container {
@@ -84,21 +91,134 @@
         }
 
         .tab_content {
-            margin-top: 10px;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .tab {
             display: none;
-            padding: 10px;
-            background-color: #d9d9d9;
+            background-color: transparent;
             border-radius: 10px;
             margin: 10px;
+            width: calc(100% - 20px);
+            box-sizing: border-box;
         }
 
         .tab.active {
             display: block;
         }
-        
+
+        .add-button {
+            display: none;
+            position: relative;
+            margin: 10px auto;
+            width: 200px;  
+            height: 40px;
+            background-color: #bdd8a1;
+            color: black;
+            border: none;
+            border-radius: 10px;  
+            font-size: 24px;
+            font-weight: bold;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            position: relative;  
+            background-color: #f0e6e9;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid black;
+            width: 300px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .modal-content input {
+            padding: 12px; 
+            border-radius: 8px;  
+            border: 1px solid #ddd;
+            font-size: 16px;  
+            width: calc(100% - 24px);  
+            margin-bottom: 10px;
+        }
+
+        #saveMeal {
+            background-color: #bdd8a1;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 5px;  
+        }
+
+        .close {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            color: #000;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background-color 0.2s ease;
+        }
+
+        #mealList, #dayContent1 {
+            padding: 0;
+            margin: 0 10px;
+            width: calc(100% - 20px);
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        #mealList li, #mealList p, #dayContent1 p, #dayContent1 div, .meal-item, .workout-item {
+            width: 100%;
+            padding: 10px;
+            background-color: #d9d9d9;
+            margin: 5px 0;
+            border-radius: 10px;
+            box-sizing: border-box;
+        }
+
+        .meal-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .delete-button {
+            background: red;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <html>
@@ -110,31 +230,31 @@
                 <h2>Past Week</h2>
                 <div class="checkin_boxes">
                     <label class="day-label">
-                        <input type="checkbox" name="checkin" />
+                        <input type="radio" name="checkin" onclick="selectDay('Sun')" />
                         <div class="day-box">Sun</div>
                     </label>
                     <label class="day-label">
-                        <input type="checkbox" name="checkin" />
+                        <input type="radio" name="checkin" onclick="selectDay('Mon')" />
                         <div class="day-box">Mon</div>
                     </label>
                     <label class="day-label">
-                        <input type="checkbox" name="checkin" />
+                        <input type="radio" name="checkin" onclick="selectDay('Tue')" />
                         <div class="day-box">Tue</div>
                     </label>
                     <label class="day-label">
-                        <input type="checkbox" name="checkin" />
+                        <input type="radio" name="checkin" onclick="selectDay('Wed')" />
                         <div class="day-box">Wed</div>
                     </label>
                     <label class="day-label">
-                        <input type="checkbox" name="checkin" />
+                        <input type="radio" name="checkin" onclick="selectDay('Thu')" />
                         <div class="day-box">Thu</div>
                     </label>
                     <label class="day-label">
-                        <input type="checkbox" name="checkin" />
+                        <input type="radio" name="checkin" onclick="selectDay('Fri')" />
                         <div class="day-box">Fri</div>
                     </label>
                     <label class="day-label">
-                        <input type="checkbox" name="checkin" />
+                        <input type="radio" name="checkin" onclick="selectDay('Sat')" />
                         <div class="day-box">Sat</div>
                     </label>
                 </div>
@@ -142,23 +262,196 @@
             
             <div class="tab_container">
                 <div class="tab_select">
-                    <button onclick="selectTab(1)" id="tabBtn1" class="active">Past Week</button>
+                    <button onclick="selectTab(1)" id="tabBtn1" class="active">Workouts</button>
                     <button onclick="selectTab(2)" id="tabBtn2">Meals</button>
                 </div>
+                <button id="addMealButton" class="add-button">+</button>
                 <div class="tab_content">
-                    <div id="tab1" class="tab active">Content for Past Week</div>
-                    <div id="tab2" class="tab">Content for Meals</div>
+                    <div id="tab1" class="tab active">
+                        <div id="dayContent1"></div>
+                    </div>
+                    <div id="tab2" class="tab">
+                        <ul id="mealList"></ul>
+                    </div>
                 </div>
             </div>
-            
+
+            <div id="mealModal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h3>Add Meal</h3>
+                    <input type="text" id="mealName" placeholder="Meal Name">
+                    <input type="number" id="mealCalories" placeholder="Calories">
+                    <button id="saveMeal">Save</button>
+                </div>
+            </div>
 
             <script>
+                const dayData = {
+                    Sun: { pastWeek: [], meals: [] },
+                    Mon: { pastWeek: [], meals: [] },
+                    Tue: { pastWeek: [], meals: [] },
+                    Wed: { pastWeek: [], meals: [] },
+                    Thu: { pastWeek: [], meals: [] },
+                    Fri: { pastWeek: [], meals: [] },
+                    Sat: { pastWeek: [], meals: [] },
+                };
+
+                function updateDayBoxes() {
+                    const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+                    daysOfWeek.forEach(day => {
+                        const radioButton = document.querySelector(`input[name="checkin"][onclick="selectDay('${day}')"]`);
+                        if (radioButton) {
+                            const dayBox = radioButton.nextElementSibling;
+                         
+                            const hasWorkouts = Array.isArray(dayData[day].pastWeek) && dayData[day].pastWeek.length > 0;
+                            const hasMeals = Array.isArray(dayData[day].meals) && dayData[day].meals.length > 0;
+
+                          
+                            if (hasWorkouts || hasMeals) {
+                                dayBox.classList.add('has-data');
+                                dayBox.classList.remove('no-data');
+                            } else {
+                                dayBox.classList.add('no-data');
+                                dayBox.classList.remove('has-data');
+                            }
+                        }
+                    });
+                }
+
+                document.addEventListener("DOMContentLoaded", function () {
+                 
+                    const savedData = localStorage.getItem("dayData");
+                    if (savedData) {
+                        Object.assign(dayData, JSON.parse(savedData));
+                    }
+                    
+                    const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+                    const today = new Date().getDay();
+                    const currentDay = daysOfWeek[today];
+           
+                    const dayRadio = document.querySelector(`input[name="checkin"][onclick="selectDay('${currentDay}')"]`);
+                    if (dayRadio) {
+                        dayRadio.checked = true;
+                        selectDay(currentDay);
+                    }
+         
+                    updateDayBoxes();
+
+         
+                    const modal = document.getElementById("mealModal");
+                    const addMealButton = document.getElementById("addMealButton");
+                    const closeButton = document.querySelector(".modal .close");
+                    const saveMealButton = document.getElementById("saveMeal");
+                    const mealNameInput = document.getElementById("mealName");
+                    const mealCaloriesInput = document.getElementById("mealCalories");
+
+                    addMealButton.addEventListener("click", () => {
+                        modal.style.display = "block";
+                    });
+
+                    closeButton.addEventListener("click", () => {
+                        modal.style.display = "none";
+                    });
+
+                    window.addEventListener("click", (event) => {
+                        if (event.target === modal) {
+                            modal.style.display = "none";
+                        }
+                    });
+
+                    saveMealButton.addEventListener("click", () => {
+                        const mealName = mealNameInput.value.trim();
+                        const mealCalories = mealCaloriesInput.value.trim();
+
+                        if (mealName && mealCalories) {
+                            const selectedDay = document.querySelector('input[name="checkin"]:checked');
+                            if (!selectedDay) {
+                                alert("Please select a day first.");
+                                return;
+                            }
+
+                            const day = selectedDay.getAttribute("onclick").match(/selectDay\('(\w+)'\)/)[1];
+
+                            dayData[day].meals.push({
+                                name: mealName,
+                                calories: parseInt(mealCalories)
+                            });
+
+                            updateMealsTab(day);
+                            updateDayBoxes();
+                            localStorage.setItem("dayData", JSON.stringify(dayData));
+                            
+                            modal.style.display = "none";
+                            mealNameInput.value = "";
+                            mealCaloriesInput.value = "";
+
+                            selectDay(day);
+                        } else {
+                            alert("Please fill out all fields.");
+                        }
+                    });
+                });
+
                 function selectTab(tabIndex) {
                     document.querySelectorAll(".tab").forEach(tab => tab.classList.remove("active"));
                     document.querySelectorAll(".tab_select button").forEach(btn => btn.classList.remove("active"));
-        
+
                     document.getElementById("tab" + tabIndex).classList.add("active");
                     document.getElementById("tabBtn" + tabIndex).classList.add("active");
+
+                    const addButton = document.getElementById("addMealButton");
+                    addButton.style.display = tabIndex === 2 ? "flex" : "none";
+                }
+
+                function selectDay(day) {
+                    const dayContent1 = document.getElementById("dayContent1");
+                    const exercises = dayData[day].pastWeek;
+                    
+                    if (Array.isArray(exercises) && exercises.length > 0) {
+                        dayContent1.innerHTML = exercises
+                            .map(exercise => `
+                                <div class="workout-item">
+                                    <strong>${exercise.name}</strong>
+                                    <br>
+                                    ${exercise.details}
+                                </div>
+                            `)
+                            .join("");
+                    } else {
+                        dayContent1.innerHTML = '<p>No Workouts Recorded</p>';
+                    }
+                    updateMealsTab(day);
+                }
+
+                function updateMealsTab(day) {
+                    const mealList = document.getElementById("mealList");
+                    const meals = dayData[day].meals;
+                    
+                    if (meals.length > 0) {
+                        mealList.innerHTML = meals
+                            .map((meal, index) => `
+                                <li class="meal-item">
+                                    <div>
+                                        <strong>${meal.name}</strong>
+                                        <br>
+                                        ${meal.calories} calories
+                                    </div>
+                                    <button onclick="deleteMeal('${day}', ${index})" class="delete-button">&times;</button>
+                                </li>
+                            `)
+                            .join("");
+                    } else {
+                        mealList.innerHTML = '<p>No Meals Recorded</p>';
+                    }
+                }
+
+                function deleteMeal(day, index) {
+                    dayData[day].meals.splice(index, 1);
+                    updateMealsTab(day);
+                    updateDayBoxes();
+                    localStorage.setItem("dayData", JSON.stringify(dayData));
+                    selectDay(day);
                 }
             </script>
 

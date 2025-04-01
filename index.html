@@ -319,6 +319,32 @@
                 const heightInput = document.getElementById("heightInput");
                 const genderInput = document.getElementById("genderInput");
 
+                const savedData = JSON.parse(localStorage.getItem('profileData') || '{}');
+                
+
+                if (savedData.experience) {
+                    experienceInput.value = savedData.experience;
+                    experienceSpan.textContent = savedData.experience;
+                }
+                if (savedData.age) {
+                    ageInput.value = savedData.age;
+                    ageSpan.textContent = savedData.age + " yrs";
+                }
+                if (savedData.weight) {
+                    weightInput.value = savedData.weight;
+                    weightSpan.textContent = savedData.weight + " lbs";
+                }
+                if (savedData.height) {
+                    heightInput.value = savedData.height;
+                    const feet = Math.floor(savedData.height / 12);
+                    const inches = savedData.height % 12;
+                    heightSpan.textContent = `${feet}'${inches}"`;
+                }
+                if (savedData.gender) {
+                    genderInput.value = savedData.gender;
+                    genderSpan.textContent = savedData.gender;
+                }
+
                 editButton.addEventListener("click", function () {
                     modal.style.display = "flex";
                     document.body.classList.add("modal-open"); 
@@ -330,6 +356,14 @@
                 });
 
                 saveButton.addEventListener("click", function () {
+                    const profileData = {
+                        experience: experienceInput.value,
+                        age: ageInput.value,
+                        weight: weightInput.value,
+                        height: heightInput.value,
+                        gender: genderInput.value
+                    };
+                    localStorage.setItem('profileData', JSON.stringify(profileData));
 
                     experienceSpan.textContent = experienceInput.value;
 
@@ -338,7 +372,6 @@
                     } else {
                         ageSpan.textContent = ageInput.value + " yrs";
                     }
-
 
                     if (weightInput.value.trim() === "") {
                         weightSpan.textContent = "Unknown";
@@ -355,9 +388,7 @@
                         heightSpan.textContent = "Unknown";
                     }
 
-
                     genderSpan.textContent = genderInput.value;
-
 
                     modal.style.display = "none";
                     document.body.classList.remove("modal-open");

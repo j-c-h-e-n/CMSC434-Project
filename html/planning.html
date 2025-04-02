@@ -245,6 +245,33 @@
             border-radius: 15px;
         }
 
+        .exercise-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .favorite-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin-right: 5px;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #aaa;
+            transition: color 0.3s ease;
+        }
+
+        .favorite-btn.favorited {
+            color: #f8bb86;
+        }
+
+        .favorite-btn:hover {
+            color: #f8bb86;
+        }
 
     </style>
 </head>
@@ -294,6 +321,10 @@
                         <label for="weights">Weights</label>
                     </div>
                     
+                    <div class="filter-checkbox">
+                        <input type="checkbox" class="filter" id="favorites" value="favorites">
+                        <label for="favorites">Favorites</label>
+                    </div>
                 </form>
             </div>
 
@@ -336,9 +367,22 @@
             // Function to fetch and load exercises data
             async function loadExercises() {
                 try {
-                    const response = await fetch('../resources/exercises.json');
-                    const data = await response.json();
-                    allExercises = data.exercises;
+                    // First, check if exercises exist in localStorage
+                    const storedExercises = localStorage.getItem('exercises');
+                    
+                    if (storedExercises) {
+                        // If exercises exist in localStorage, use them
+                        allExercises = JSON.parse(storedExercises);
+                    } else {
+                        // If not in localStorage, fetch from file and store them
+                        const response = await fetch('../resources/exercises.json');
+                        const data = await response.json();
+                        allExercises = data.exercises;
+                        
+                        // Save to localStorage for future use
+                        localStorage.setItem('exercises', JSON.stringify(allExercises));
+                    }
+                    
                     filteredExercises = [...allExercises]; // Create a copy
                     displayExercises(filteredExercises);
                 } catch (error) {
@@ -369,24 +413,98 @@
                                 <span>${exercise.caloriesPerMinute} cal/min</span>
                             </div>
                         </div>
-                        <button class="add-exercise-btn" data-id="${exercise.id}">Add</button>
+                        <div class="exercise-actions">
+                            <button class="favorite-btn ${exercise.favorited ? 'favorited' : ''}" data-id="${exercise.id}">
+                                ${exercise.favorited ? '★' : '☆'}
+                            </button>
+                            <button class="add-exercise-btn" data-id="${exercise.id}">Add</button>
+                        </div>
                     `;
                     exerciseList.appendChild(exerciseItem);
                 });
 
-                // Add event listeners to Add buttons
+                // Add event listeners to buttons
                 document.querySelectorAll('.add-exercise-btn').forEach(button => {
                     button.addEventListener('click', function() {
                         const exerciseId = this.getAttribute('data-id');
                         addExerciseToWorkout(exerciseId);
                     });
                 });
+                
+                document.querySelectorAll('.favorite-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const exerciseId = this.getAttribute('data-id');
+                        toggleFavorite(exerciseId);
+                    });
+                });
             }
 
-            // Function to add exercise to workout (placeholder for now)
+            // Function to toggle exercise favorite status
+            function toggleFavorite(exerciseId) {
+                // Find the exercise in the array
+                const exercise = allExercises.find(ex => ex.id == exerciseId);
+                if (!exercise) return;
+                
+                // Toggle the favorited status
+                exercise.favorited = !exercise.favorited;
+                
+                // Update the display
+                const button = document.querySelector(`.favorite-btn[data-id="${exerciseId}"]`);
+                if (button) {
+                    button.classList.toggle('favorited');
+                    button.innerHTML = exercise.favorited ? '★' : '☆';
+                }
+                
+                // Save updated exercises to localStorage
+                localStorage.setItem('exercises', JSON.stringify(allExercises));
+                
+                // Refresh the display if favorites filter is active
+                if (document.getElementById('favorites').checked) {
+                    filterExercises();
+                }
+            }
+
+            // Function to add exercise to workout
             function addExerciseToWorkout(exerciseId) {
-                // This would be implemented later to add the exercise to the user's workout
-                alert(`Exercise ${exerciseId} added to workout!`);
+                // Find the selected exercise
+                const exercise = allExercises.find(ex => ex.id == exerciseId);
+                
+                if (!exercise) {
+                    alert('Exercise not found!');
+                    return;
+                }
+                
+                // Get current workout from localStorage or initialize empty
+                let currentWorkout = JSON.parse(localStorage.getItem('currentWorkout')) || {
+                    id: Date.now(),
+                    created: new Date().toISOString()
+                };
+                
+                // If this is a new workout, set the name with the date
+                if (!currentWorkout.exercises || currentWorkout.exercises.length === 0) {
+                    const workoutDate = new Date(currentWorkout.created).toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric'
+                    });
+                    currentWorkout.name = `Workout ${workoutDate}`;
+                    currentWorkout.exercises = [];
+                }
+                
+                // Add this exercise to the workout
+                currentWorkout.exercises.push({
+                    exerciseId: exercise.id,
+                    name: exercise.name,
+                    type: exercise.type,
+                    difficulty: exercise.difficulty,
+                    sets: 3,  // Default values
+                    reps: 10, // Default values
+                    duration: 0,
+                    completed: false // Track completion status
+                });
+                
+                // Save back to localStorage
+                localStorage.setItem('currentWorkout', JSON.stringify(currentWorkout));                
             }
 
             // Function to filter exercises based on selected filters
@@ -398,8 +516,13 @@
                 // Get selected types
                 const selectedTypes = [];
                 document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
-                    selectedTypes.push(checkbox.value);
+                    if (checkbox.value !== 'favorites') {
+                        selectedTypes.push(checkbox.value);
+                    }
                 });
+                
+                // Check if favorites filter is active
+                const showOnlyFavorites = document.getElementById('favorites').checked;
 
                 // Filter exercises
                 filteredExercises = allExercises.filter(exercise => {
@@ -409,7 +532,10 @@
                     // Apply type filter if any types are selected
                     const typeMatch = selectedTypes.length === 0 || selectedTypes.includes(exercise.type);
                     
-                    return difficultyMatch && typeMatch;
+                    // Apply favorites filter if selected
+                    const favoritesMatch = !showOnlyFavorites || exercise.favorited;
+                    
+                    return difficultyMatch && typeMatch && favoritesMatch;
                 });
 
                 // Display filtered exercises

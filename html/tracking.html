@@ -195,7 +195,7 @@
             box-sizing: border-box;
         }
 
-        #mealList li, #mealList p, #dayContent1 p, #dayContent1 div, .meal-item, .workout-item {
+        #mealList li, #mealList p, #dayContent1 p {
             width: 100%;
             padding: 10px;
             background-color: #d9d9d9;
@@ -208,6 +208,12 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            width: 100%;
+            padding: 10px;
+            background-color: #d9d9d9;
+            margin: 5px 0;
+            border-radius: 10px;
+            box-sizing: border-box;
         }
 
         .delete-button {
@@ -218,6 +224,183 @@
             width: 24px;
             height: 24px;
             cursor: pointer;
+        }
+
+        .workout-item {
+            width: 100%;
+            padding: 15px;
+            background-color: #fff6f4;
+            margin: 8px 0;
+            border-radius: 15px;
+            box-sizing: border-box;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .workout-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .workout-title {
+            font-weight: bold;
+            font-size: 16px;
+            color: #333;
+            padding-right: 30px; /* Make space for delete button */
+        }
+
+        .workout-summary {
+            font-size: 14px;
+            color: #666;
+            padding-right: 30px; /* Add padding to ensure text doesn't overlap with delete button */
+        }
+
+        .workout-delete-btn {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: #d88c8c;
+            color: white;
+            border: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .workout-delete-btn:hover {
+            background-color: #b35f5f;
+        }
+
+        .exercise-list {
+            margin-top: 15px;
+        }
+
+        .exercise-item-tracking {
+            background-color: #f0e6e9;
+            border-radius: 15px;
+            padding: 15px;
+            margin: 10px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            position: relative;
+        }
+
+        .exercise-name-tracking {
+            font-weight: bold;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .exercise-tag-container {
+            display: flex;
+            gap: 8px;
+        }
+
+        .exercise-tag {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+        }
+
+        .tag-Easy {
+            background-color: #bdd8a1;
+            color: #2c3e50;
+        }
+
+        .tag-Medium {
+            background-color: #f9f4b2;
+            color: #2c3e50;
+        }
+
+        .tag-Hard {
+            background-color: #d88c8c;
+            color: #2c3e50;
+        }
+
+        .tag-type {
+            background-color: #fff6f4;
+            color: #2c3e50;
+        }
+
+        .exercise-details-tracking {
+            font-size: 14px;
+            color: #666;
+        }
+
+        #dayContent1 {
+            padding: 10px;
+        }
+
+        .exercise-actions {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+        }
+        
+        .edit-exercise-btn {
+            background-color: #bdd8a1;
+            border: none;
+            border-radius: 15px;
+            padding: 5px 10px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            color: #2c3e50;
+        }
+        
+        .edit-exercise-btn:hover {
+            background-color: #7fa85e;
+            color: white;
+        }
+        
+        .edit-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+            align-items: center;
+        }
+        
+        .edit-form input {
+            width: 60px;
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        
+        .edit-form button {
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .save-btn {
+            background-color: #bdd8a1;
+            color: #2c3e50;
+        }
+        
+        .save-btn:hover {
+            background-color: #7fa85e;
+        }
+        
+        .cancel-btn {
+            background-color: #d9d9d9;
+            color: #2c3e50;
+        }
+        
+        .cancel-btn:hover {
+            background-color: #aaa;
         }
     </style>
 </head>
@@ -409,15 +592,44 @@
                     const exercises = dayData[day].pastWeek;
                     
                     if (Array.isArray(exercises) && exercises.length > 0) {
-                        dayContent1.innerHTML = exercises
-                            .map(exercise => `
+                        let html = '';
+                        exercises.forEach((workout, index) => {
+                            html += `
                                 <div class="workout-item">
-                                    <strong>${exercise.name}</strong>
-                                    <br>
-                                    ${exercise.details}
-                                </div>
-                            `)
-                            .join("");
+                                    <div class="workout-header">
+                                        <div style="flex: 1;">
+                                            <div class="workout-title">${workout.name}</div>
+                                            <div class="workout-summary">${workout.details}</div>
+                                        </div>
+                                        <button class="workout-delete-btn" onclick="deleteWorkout('${day}', ${index})">&times;</button>
+                                    </div>
+                            `;
+                            
+                            if (workout.exercises && workout.exercises.length > 0) {
+                                html += `<div class="exercise-list">`;
+                                workout.exercises.forEach((exercise, exerciseIndex) => {
+                                    html += `
+                                        <div class="exercise-item-tracking" id="exercise-${day}-${index}-${exerciseIndex}">
+                                            <div class="exercise-actions">
+                                                <button class="edit-exercise-btn" onclick="showEditForm('${day}', ${index}, ${exerciseIndex})">Edit Exercise</button>
+                                            </div>
+                                            <div class="exercise-name-tracking">${exercise.name}</div>
+                                            <div class="exercise-tag-container">
+                                                <span class="exercise-tag tag-${exercise.difficulty}">${exercise.difficulty}</span>
+                                                <span class="exercise-tag tag-type">${exercise.type}</span>
+                                            </div>
+                                            <div class="exercise-details-tracking">
+                                                Sets: ${exercise.sets} | Reps: ${exercise.reps}
+                                            </div>
+                                        </div>
+                                    `;
+                                });
+                                html += `</div>`;
+                            }
+                            
+                            html += `</div>`;
+                        });
+                        dayContent1.innerHTML = html;
                     } else {
                         dayContent1.innerHTML = '<p>No Workouts Recorded</p>';
                     }
@@ -452,6 +664,75 @@
                     updateDayBoxes();
                     localStorage.setItem("dayData", JSON.stringify(dayData));
                     selectDay(day);
+                }
+
+                function deleteWorkout(day, index) {
+                    dayData[day].pastWeek.splice(index, 1);
+                    updateDayBoxes();
+                    localStorage.setItem("dayData", JSON.stringify(dayData));
+                    selectDay(day);
+                    console.log(`Workout deleted from ${day}`);
+                }
+
+                function showEditForm(day, workoutIndex, exerciseIndex) {
+                    const exerciseItem = document.getElementById(`exercise-${day}-${workoutIndex}-${exerciseIndex}`);
+                    const exercise = dayData[day].pastWeek[workoutIndex].exercises[exerciseIndex];
+                    
+                    // Store original content to restore if canceled
+                    const originalContent = exerciseItem.innerHTML;
+                    exerciseItem.setAttribute('data-original-content', originalContent);
+                    
+                    // Create edit form
+                    const editForm = document.createElement('div');
+                    editForm.className = 'edit-form';
+                    editForm.innerHTML = `
+                        <div class="exercise-name-tracking">${exercise.name}</div>
+                        <div>
+                            <label for="edit-sets">Sets:</label>
+                            <input type="number" id="edit-sets" value="${exercise.sets}" min="1" max="20">
+                        </div>
+                        <div>
+                            <label for="edit-reps">Reps:</label>
+                            <input type="number" id="edit-reps" value="${exercise.reps}" min="1" max="100">
+                        </div>
+                        <button class="save-btn" onclick="saveExerciseChanges('${day}', ${workoutIndex}, ${exerciseIndex})">Save</button>
+                        <button class="cancel-btn" onclick="cancelEdit('${day}', ${workoutIndex}, ${exerciseIndex})">Cancel</button>
+                    `;
+                    
+                    // Replace content with form
+                    exerciseItem.innerHTML = '';
+                    exerciseItem.appendChild(editForm);
+                }
+                
+                function saveExerciseChanges(day, workoutIndex, exerciseIndex) {
+                    const exerciseItem = document.getElementById(`exercise-${day}-${workoutIndex}-${exerciseIndex}`);
+                    const exercise = dayData[day].pastWeek[workoutIndex].exercises[exerciseIndex];
+                    
+                    // Get new values
+                    const newSets = parseInt(document.getElementById('edit-sets').value);
+                    const newReps = parseInt(document.getElementById('edit-reps').value);
+                    
+                    // Validate input
+                    if (isNaN(newSets) || isNaN(newReps) || newSets < 1 || newReps < 1) {
+                        alert('Please enter valid numbers for sets and reps');
+                        return;
+                    }
+                    
+                    // Update exercise data
+                    exercise.sets = newSets;
+                    exercise.reps = newReps;
+                    
+                    // Save to localStorage
+                    localStorage.setItem('dayData', JSON.stringify(dayData));
+                    
+                    // Refresh display
+                    selectDay(day);
+                }
+                
+                function cancelEdit(day, workoutIndex, exerciseIndex) {
+                    const exerciseItem = document.getElementById(`exercise-${day}-${workoutIndex}-${exerciseIndex}`);
+                    const originalContent = exerciseItem.getAttribute('data-original-content');
+                    exerciseItem.innerHTML = originalContent;
                 }
             </script>
 

@@ -109,7 +109,8 @@
         
         .past-workouts-title {
             font-size: 1.5em;
-            margin: 20px;
+            margin-top: 20px;
+            margin-left: 20px;
             text-wrap: nowrap;
         }
         
@@ -133,6 +134,282 @@
             color: #666;
             margin: 5px 0;
         }
+        
+        /* Styles for workout details and exercise list */
+        .workout-details {
+            padding: 0 20px;
+            height: 100%;
+            overflow-y: auto;
+        }
+        
+        .exercises-list {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+        
+        .exercise-item {
+            background-color: #fff6f4;
+            border-radius: 15px;
+            padding: 15px;
+            margin: 8px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        .exercise-item.completed {
+            background-color: #e8f5d6;
+            border-left: 5px solid #7fa85e;
+        }
+        
+        .exercise-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .exercise-content {
+            display: flex;
+            flex-grow: 1;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .exercise-info {
+            flex-grow: 1;
+        }
+        
+        .exercise-name {
+            font-weight: bold;
+            font-size: 16px;
+            color: #333;
+        }
+        
+        .exercise-details {
+            font-size: 14px;
+            color: #666;
+            margin-top: 6px;
+        }
+        
+        .exercise-sets {
+            font-size: 14px;
+            color: #666;
+            margin-top: 6px;
+        }
+        
+        .exercise-difficulty {
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+            margin-right: 5px;
+            display: inline-block;
+        }
+        
+        .difficulty-Easy {
+            background-color: #bdd8a1;
+            color: #2c3e50;
+        }
+        
+        .difficulty-Medium {
+            background-color: #f9f4b2;
+            color: #2c3e50;
+        }
+        
+        .difficulty-Hard {
+            background-color: #d88c8c;
+            color: #2c3e50;
+        }
+        
+        .exercise-type {
+            background-color: #f0e6e9;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+            color: #2c3e50;
+            display: inline-block;
+        }
+        
+        .remove-exercise-btn {
+            background-color: #d88c8c;
+            border: none;
+            border-radius: 15px;
+            padding: 8px 15px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .remove-exercise-btn:hover {
+            background-color: #b35f5f;
+            color: #fff;
+        }
+        
+        .workout-actions {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        
+        .complete-workout-btn {
+            background-color: #bdd8a1;
+            border: none;
+            border-radius: 15px;
+            padding: 12px 25px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-weight: bold;
+            font-size: 16px;
+            color: #2c3e50;
+        }
+        
+        .complete-workout-btn:hover {
+            background-color: #7fa85e;
+            color: #fff;
+        }
+        
+        .end-workout-btn {
+            background-color: #d88c8c;
+            border: none;
+            border-radius: 15px;
+            padding: 12px 25px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-weight: bold;
+            font-size: 16px;
+            color: #2c3e50;
+            margin: 0 10px;
+        }
+        
+        .end-workout-btn:hover {
+            background-color: #b35f5f;
+            color: #fff;
+        }
+        
+        .checkbox-container {
+            display: inline-block;
+            position: relative;
+            cursor: pointer;
+            user-select: none;
+            width: 24px;
+            height: 24px;
+        }
+        
+        .checkbox-container input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+        
+        .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 24px;
+            width: 24px;
+            background-color: #fff;
+            border: 2px solid #bdd8a1;
+            border-radius: 5px;
+            transition: all 0.2s ease;
+        }
+        
+        .checkbox-container:hover .checkmark {
+            background-color: #f0f9e8;
+        }
+        
+        .checkbox-container input:checked ~ .checkmark {
+            background-color: #7fa85e;
+            border-color: #7fa85e;
+        }
+        
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+        
+        .checkbox-container input:checked ~ .checkmark:after {
+            display: block;
+        }
+        
+        .checkbox-container .checkmark:after {
+            left: 9px;
+            top: 5px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+        
+        /* Past workouts list styles */
+        .past-workouts-list {
+            padding: 0 20px;
+            display: flex;
+            overflow-x: auto;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .past-workout-item {
+            background-color: #fff6f4;
+            border-radius: 15px;
+            padding: 12px 15px;
+            min-width: 160px;
+            max-width: 160px;
+            height: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+        
+        .past-workout-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .past-workout-name {
+            font-weight: bold;
+            font-size: 14px;
+            color: #333;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .past-workout-date, .past-workout-count {
+            font-size: 12px;
+            color: #666;
+            margin-top: 3px;
+        }
+        
+        .delete-workout-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background-color: #d88c8c;
+            color: white;
+            border: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        .delete-workout-btn:hover {
+            background-color: #b35f5f;
+        }
     </style>
 </head>
 
@@ -142,22 +419,26 @@
             <h1>Workout</h1>
 
             <div class="workout-container">
-                <button class="section-button">Create New Exercise</button>
+                <button class="section-button" onclick="location.href='./planning.html'">Add Exercises</button>
                 
                 <div class="past-workouts">
                     <div class="past-workouts-title">Past Workouts</div>
-                    <div class="past-workouts-empty">
-                        <p>No past workouts found.</p>
-                        <p>Create your first workout to see it here!</p>
+                    <div id="past-workouts-content">
+                        <div class="past-workouts-empty">
+                            <p>No past workouts found.</p>
+                            <p>Create your first workout to see it here!</p>
+                        </div>
                     </div>
                 </div>
 
                 <div class="main-workout-area">
                     <div class="main-workout-title">Current Workout</div>
-                    <div class="empty-state">
-                        <p>No workout exercises added yet.</p>
-                        <p>Add exercises from planning or create a new one!</p>
-                        <button class="create-workout-btn" onclick="location.href='./planning.html'">Create Workout</button>
+                    <div id="workout-content">
+                        <div class="empty-state">
+                            <p>No workout exercises added yet.</p>
+                            <p>Add exercises from planning or create a new one!</p>
+                            <button class="create-workout-btn" onclick="location.href='./planning.html'">Create Workout</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -185,6 +466,308 @@
                 </div>
             </div>
         </div>
+
+        <script>
+            // Load workout data from localStorage
+            function loadWorkouts() {
+                // Get current workout
+                const currentWorkout = JSON.parse(localStorage.getItem('currentWorkout'));
+                displayCurrentWorkout(currentWorkout);
+                
+                // Get past workouts
+                const pastWorkouts = JSON.parse(localStorage.getItem('pastWorkouts')) || [];
+                displayPastWorkouts(pastWorkouts);
+            }
+            
+            // Display current workout
+            function displayCurrentWorkout(workout) {
+                const workoutContent = document.getElementById('workout-content');
+                
+                if (!workout || !workout.exercises || workout.exercises.length === 0) {
+                    workoutContent.innerHTML = `
+                        <div class="empty-state">
+                            <p>No workout exercises added yet.</p>
+                            <p>Add exercises from planning or create a new one!</p>
+                            <button class="create-workout-btn" onclick="location.href='./planning.html'">Create Workout</button>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                let html = `
+                    <div class="workout-details">
+                        <div class="exercises-list">
+                `;
+                
+                workout.exercises.forEach(exercise => {
+                    const completedClass = exercise.completed ? 'completed' : '';
+                    const checkedAttr = exercise.completed ? 'checked' : '';
+                    
+                    html += `
+                        <div class="exercise-item ${completedClass}" data-id="${exercise.exerciseId}">
+                            <div class="exercise-content">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" class="exercise-checkbox" data-id="${exercise.exerciseId}" ${checkedAttr}>
+                                    <span class="checkmark"></span>
+                                </label>
+                                <div class="exercise-info">
+                                    <div class="exercise-name">${exercise.name}</div>
+                                    <div class="exercise-details">
+                                        <span class="difficulty-${exercise.difficulty} exercise-difficulty">${exercise.difficulty}</span>
+                                        <span class="exercise-type">${exercise.type}</span>
+                                    </div>
+                                    <div class="exercise-sets">Sets: ${exercise.sets} | Reps: ${exercise.reps}</div>
+                                </div>
+                            </div>
+                            <button class="remove-exercise-btn" data-id="${exercise.exerciseId}">Remove</button>
+                        </div>
+                    `;
+                });
+                
+                html += `
+                        </div>
+                        <div class="workout-actions">
+                            <button class="complete-workout-btn" onclick="completeWorkout()">Complete Workout</button>
+                        </div>
+                    </div>
+                `;
+                
+                workoutContent.innerHTML = html;
+                
+                // Add event listeners
+                document.querySelectorAll('.remove-exercise-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const exerciseId = this.getAttribute('data-id');
+                        removeExerciseFromWorkout(exerciseId);
+                    });
+                });
+                
+                document.querySelectorAll('.exercise-checkbox').forEach(checkbox => {
+                    checkbox.addEventListener('change', function() {
+                        const exerciseId = this.getAttribute('data-id');
+                        toggleExerciseCompletion(exerciseId, this.checked);
+                    });
+                });
+            }
+            
+            // Display past workouts
+            function displayPastWorkouts(workouts) {
+                const pastWorkoutsContent = document.getElementById('past-workouts-content');
+                
+                if (!workouts || workouts.length === 0) {
+                    pastWorkoutsContent.innerHTML = `
+                        <div class="past-workouts-empty">
+                            <p>No past workouts found.</p>
+                            <p>Create your first workout to see it here!</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                let html = `<div class="past-workouts-list">`;
+                
+                // Display most recent 3 workouts
+                const recentWorkouts = workouts.slice(0, 3);
+                
+                recentWorkouts.forEach(workout => {
+                    const completedDate = new Date(workout.completed).toLocaleDateString();
+                    const exerciseCount = workout.exercises.length;
+                    const completedExercises = workout.exercises.filter(ex => ex.completed).length;
+                    
+                    // Format workout name with date
+                    const workoutDate = new Date(workout.created).toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric'
+                    });
+                    const workoutName = `Workout ${workoutDate}`;
+                    
+                    html += `
+                        <div class="past-workout-item" data-id="${workout.id}">
+                            <button class="delete-workout-btn" data-id="${workout.id}">✕</button>
+                            <div class="past-workout-info">
+                                <span class="past-workout-name">${workoutName}</span>
+                                <span class="past-workout-date">Completed: ${completedDate}</span>
+                                <span class="past-workout-count">${completedExercises}/${exerciseCount} exercises</span>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += `</div>`;
+                pastWorkoutsContent.innerHTML = html;
+                
+                // Add event listeners for delete buttons
+                document.querySelectorAll('.delete-workout-btn').forEach(button => {
+                    button.addEventListener('click', function(e) {
+                        e.stopPropagation(); // Prevent triggering parent click events
+                        const workoutId = this.getAttribute('data-id');
+                        deletePastWorkout(workoutId);
+                    });
+                });
+            }
+            
+            // Delete a past workout
+            function deletePastWorkout(workoutId) {
+                // Get past workouts
+                let pastWorkouts = JSON.parse(localStorage.getItem('pastWorkouts')) || [];
+                
+                // Find workout index
+                const workoutIndex = pastWorkouts.findIndex(w => w.id == workoutId);
+                
+                if (workoutIndex !== -1) {
+                    // Remove the workout
+                    pastWorkouts.splice(workoutIndex, 1);
+                    
+                    // Save back to localStorage
+                    localStorage.setItem('pastWorkouts', JSON.stringify(pastWorkouts));
+                    
+                    // Refresh display
+                    displayPastWorkouts(pastWorkouts);
+                    
+                    console.log(`Workout deleted`);
+                }
+            }
+            
+            // Remove exercise from current workout
+            function removeExerciseFromWorkout(exerciseId) {
+                let workout = JSON.parse(localStorage.getItem('currentWorkout'));
+                
+                if (!workout) return;
+                
+                workout.exercises = workout.exercises.filter(ex => ex.exerciseId != exerciseId);
+                localStorage.setItem('currentWorkout', JSON.stringify(workout));
+                
+                // Refresh display
+                displayCurrentWorkout(workout);
+                
+                console.log(`Exercise removed from workout`);
+            }
+            
+            // Complete current workout
+            function completeWorkout() {
+                const workout = JSON.parse(localStorage.getItem('currentWorkout'));
+                
+                if (!workout || !workout.exercises || workout.exercises.length === 0) {
+                    console.log('Cannot complete an empty workout!');
+                    return;
+                }
+                
+                // Count completed exercises
+                const completedExercises = workout.exercises.filter(ex => ex.completed).length;
+                const totalExercises = workout.exercises.length;
+                
+                // Set completion time
+                workout.completed = new Date().toISOString();
+                
+                // Update workout name with date if it's still the default
+                if (workout.name === "My Workout") {
+                    const workoutDate = new Date(workout.created).toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric'
+                    });
+                    workout.name = `Workout ${workoutDate}`;
+                }
+                
+                // Get past workouts or initialize
+                let pastWorkouts = JSON.parse(localStorage.getItem('pastWorkouts')) || [];
+                
+                // Add this workout to past workouts
+                pastWorkouts.unshift(workout); // Add to beginning of array
+                
+                // Save back to localStorage
+                localStorage.setItem('pastWorkouts', JSON.stringify(pastWorkouts));
+                
+                // Add workout to tracking page data
+                addWorkoutToTracking(workout);
+                
+                // Clear current workout
+                localStorage.removeItem('currentWorkout');
+                
+                // Refresh display
+                loadWorkouts();
+                
+                console.log(`Workout completed with ${completedExercises} out of ${totalExercises} exercises finished!`);
+            }
+            
+            // Add workout to tracking data structure
+            function addWorkoutToTracking(workout) {
+                // Get current day of week
+                const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+                const today = new Date().getDay();
+                const currentDay = daysOfWeek[today];
+                
+                // Load tracking data
+                let dayData = JSON.parse(localStorage.getItem("dayData")) || {
+                    Sun: { pastWeek: [], meals: [] },
+                    Mon: { pastWeek: [], meals: [] },
+                    Tue: { pastWeek: [], meals: [] },
+                    Wed: { pastWeek: [], meals: [] },
+                    Thu: { pastWeek: [], meals: [] },
+                    Fri: { pastWeek: [], meals: [] },
+                    Sat: { pastWeek: [], meals: [] }
+                };
+                
+                // Format workout details for display in tracking
+                const completedExercises = workout.exercises.filter(ex => ex.completed);
+                const workoutDate = new Date(workout.created).toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                });
+                
+                // Create workout summary
+                const workoutSummary = {
+                    name: `Workout ${workoutDate}`,
+                    details: `${completedExercises.length}/${workout.exercises.length} exercises completed`,
+                    exercises: completedExercises.map(ex => ({
+                        name: ex.name,
+                        type: ex.type,
+                        difficulty: ex.difficulty,
+                        sets: ex.sets,
+                        reps: ex.reps
+                    }))
+                };
+                
+                // Add to tracking data
+                dayData[currentDay].pastWeek.push(workoutSummary);
+                
+                // Save back to localStorage
+                localStorage.setItem("dayData", JSON.stringify(dayData));
+                
+                console.log(`Workout added to tracking for ${currentDay}`);
+            }
+            
+            // Toggle exercise completion status
+            function toggleExerciseCompletion(exerciseId, isCompleted) {
+                let workout = JSON.parse(localStorage.getItem('currentWorkout'));
+                
+                if (!workout) return;
+                
+                // Find the exercise and update its completion status
+                const exerciseIndex = workout.exercises.findIndex(ex => ex.exerciseId == exerciseId);
+                if (exerciseIndex !== -1) {
+                    workout.exercises[exerciseIndex].completed = isCompleted;
+                    
+                    // Update the UI
+                    const exerciseElement = document.querySelector(`.exercise-item[data-id="${exerciseId}"]`);
+                    if (exerciseElement) {
+                        if (isCompleted) {
+                            exerciseElement.classList.add('completed');
+                        } else {
+                            exerciseElement.classList.remove('completed');
+                        }
+                    }
+                    
+                    // Save to localStorage
+                    localStorage.setItem('currentWorkout', JSON.stringify(workout));
+                }
+            }
+            
+            // Load workouts when page loads
+            window.addEventListener('DOMContentLoaded', loadWorkouts);
+        </script>
     </body>
 </html>
 

@@ -57,20 +57,18 @@
             flex-direction: column;
             position: fixed;
             background-color: #f0e6e9;
-            border: solid;
-            border-color: black;
-            border-width: 1px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 30px;
-            justify-content: center;
-            align-items: center;
-            height: 350px;
+            padding: 20px;
             width: 500px;
             z-index: 9;
         }
 
+
+
         .cancel-btn-container {
             display: flex;
-            width: 500px;
+            width: 100%;
             justify-content: end;
         }
 
@@ -84,23 +82,18 @@
         .cancel-btn {
             text-align: center;
             margin: 10px 10px;
-            border-radius: 15px;
             height: 45px;
             width: 45px;
+            background-color: transparent;
+            border-color: transparent;
             font-size: 20px;
-            background-color: #FA5F55;
-            transition: background-color 0.3s;
             cursor: pointer;
-        }
-
-        .cancel-btn:hover {
-            background-color: #FF0000;
         }
 
         .goal-input {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 20px;
             margin-top: -20px;
         }
         
@@ -113,30 +106,48 @@
         }
 
         .submit-btn {
-            margin: auto;
+            margin-left: auto;
+            margin-right: 20px;
             padding: 10px;
             background-color: #bdd8a1;
-            font-size: 20px;
             color: black;
             border-radius: 10px;
+            font-size: 14px;
+            border-color: transparent;
             cursor: pointer;
-            width: 300px
+            height: 35px;
+            width: 100px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .goal-input button:hover {
             background-color: #7fa85e;
         }
+        .goal-container {
+            display: flex;
+            padding: 20px 0px;
+        }
+        
+        .goal-input input {
+            width: 90%;
+            height: 20px;
+            margin: 0 auto; /* Centers the input horizontally */
+        }
 
         .additional-details-btn {
-            padding: 8px 15px;
             border-radius: 10px;
             border: none;
-            margin: auto;
             background-color: #bdd8a1;
             color: black;
             font-size: 14px;
             cursor: pointer;
             transition: background-color 0.3s;
+            height: 42px;
+            width: 80px;
+            margin: 0 auto; /* Centers the button horizontally */
         }
 
         .additional-details-btn:hover {
@@ -144,15 +155,42 @@
         }
 
         .additional-goal-details {
-            display: none;
+            display: flex;
             flex-direction: column;
+            gap: 5px;  /* Reduced from 10px */
+            padding: 5px;  /* Reduced from 10px */
             margin-top: -20px;
             margin-bottom: 20px;
         }
 
-        .additional_goal_details input, .additional_goal_details select {
+        .additional-goal-details h2 {
+            left: 0;
+            padding-left: 6px;
+            font-size: 16px;
+            margin: 10px 0;  /* Adjusted margins */
+        }
+
+        .goal-details-inputs {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .additional-goal-details input {
+            padding: 8px;
+            width: 220px; 
+            height: 22px;
             border-radius: 10px;
             border: 1px solid #ccc;
+            margin: 0 auto;
+        }
+        .additional-goal-details select {
+            padding: 8px;
+            width: 220px;  
+            height: 40px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            margin: 0 auto;
         }
 
         .goal-list {
@@ -164,7 +202,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background-color: #d3d3d3;
+            background-color: #fff6f4;
             padding: 15px;
             margin: 5px 0;
             border-radius: 10px;
@@ -191,7 +229,7 @@
 
         .goals-tab {
             padding: 15px 20px;
-            background-color: #f0e6e9;
+            background-color: #d9d9d9;
             border-radius: 30px 0 0 0;
             cursor: pointer;
             flex: 1;
@@ -203,7 +241,7 @@
 
         .completed-tab {
             padding: 15px 20px;
-            background-color: #f0e6e9;
+            background-color: #d9d9d9;
             border-radius: 0 30px 0 0;
             cursor: pointer;
             flex: 1;
@@ -214,7 +252,7 @@
         }
 
         .active-tab {
-            background-color: #bdd8a1;
+            background-color: #f0e6e9;
             color: black;
             font-weight: bold;
         }
@@ -262,23 +300,23 @@
                 
                 <form class="goal-input" onsubmit="event.preventDefault(); addGoal();">
                     <!-- goal title/short descriptor -->
-                    <input type="text" id="goalText" placeholder="Enter your goal...">
-                    
-                    <!-- add additional information -->
-                    <button class="additional-details-btn" type="button" onclick="toggleAdditionalGoalsForm()">Add Additional Details</button>
+                    <div class="goal-container">
+                        <input type="text" id="goalText" placeholder="Enter your goal...">
+                    </div>
                     
                     <div class="additional-goal-details" id="additionalGoalsForm">
-                        <select id="goalType">
-                            <option value="None">N/A</option>
-                            <option value="Exercise">Exercise</option>
-                            <option value="Weight">Weight</option>
-                            <option value="Nutrition">Nutrition</option>
-                            <option value="Consistency">Consistency</option>
-                        </select>
-                        <input type="date" id="targetDate">
-                    
+                        <h2>Advanced Settings (Optional)</h2> 
+                        <div class="goal-details-inputs">
+                            <select id="goalType">
+                                <option value="None">N/A</option>
+                                <option value="Exercise">Exercise</option>
+                                <option value="Weight">Weight</option>
+                                <option value="Nutrition">Nutrition</option>
+                                <option value="Consistency">Consistency</option>
+                            </select>
+                            <input type="date" id="targetDate" placeholder="Target Date">
+                        </div>
                     </div>
-
                     <!-- submit goal -->
                     <button class="submit-btn" type="submit">Add Goal</button>
                 </form>
@@ -346,10 +384,11 @@
             document.getElementById("goalsForm").style.display = "none";
         }
     
-        function toggleAdditionalGoalsForm() {
-            const form = document.getElementById('additionalGoalsForm');
-            form.style.display = form.style.display === 'none' || form.style.display === '' ? 'flex' : 'none';
-        }
+        // Remove or comment out this function
+        // function toggleAdditionalGoalsForm() {
+        //     const form = document.getElementById('additionalGoalsForm');
+        //     form.style.display = form.style.display === 'none' || form.style.display === '' ? 'flex' : 'none';
+        // }
     
         function addGoal() {
             const goalText = document.getElementById("goalText").value;

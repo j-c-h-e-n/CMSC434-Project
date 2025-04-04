@@ -33,12 +33,6 @@
             background-color: #7fa85e;
         }
 
-        .goals-form-popup {
-            display: none;
-            position: fixed;
-            z-index: 9;
-        }
-
         .container {
             width: 100%;
             max-width: 560px;
@@ -46,38 +40,119 @@
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
-            height: 100vh;
+            height: 665px;
         }
 
         .box {
             background-color: #f0e6e9;
             border-radius: 30px;
             padding: 30px;
-            margin-top: 20px;
+            margin-top: -45px;
             flex-grow: 1;
-            overflow-y: auto;
+
+        }
+
+        .goals-form-popup {
+            display: none;
+            flex-direction: column;
+            position: fixed;
+            background-color: #f0e6e9;
+            border: solid;
+            border-color: black;
+            border-width: 1px;
+            border-radius: 30px;
+            justify-content: center;
+            align-items: center;
+            height: 350px;
+            width: 500px;
+            z-index: 9;
+        }
+
+        .cancel-btn-container {
+            display: flex;
+            width: 500px;
+            justify-content: end;
+        }
+
+        .cancel-btn-container h2 {
+            position: absolute;
+            left: 0;
+            font-size: 20px;
+            margin-top: 20px;
+        }
+
+        .cancel-btn {
+            text-align: center;
+            margin: 10px 10px;
+            border-radius: 15px;
+            height: 45px;
+            width: 45px;
+            font-size: 20px;
+            background-color: #FA5F55;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+
+        .cancel-btn:hover {
+            background-color: #FF0000;
         }
 
         .goal-input {
-            background-color: #f0e6e9;
             display: flex;
+            flex-direction: column;
             gap: 10px;
-            margin-bottom: 20px;
+            margin-top: -20px;
         }
-
+        
         .goal-input input, .goal-input select {
-            flex: 1;
+            margin: auto;
+            margin-top: 15px;
             padding: 10px;
             border-radius: 10px;
             border: 1px solid #ccc;
         }
 
-        .goal-input button {
+        .submit-btn {
+            margin: auto;
             padding: 10px;
-            background-color: #94b472;
-            color: white;
+            background-color: #bdd8a1;
+            font-size: 20px;
+            color: black;
             border-radius: 10px;
             cursor: pointer;
+            width: 300px
+        }
+
+        .goal-input button:hover {
+            background-color: #7fa85e;
+        }
+
+        .additional-details-btn {
+            padding: 8px 15px;
+            border-radius: 10px;
+            border: none;
+            margin: auto;
+            background-color: #bdd8a1;
+            color: black;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .additional-details-btn:hover {
+            background-color: #7fa85e;
+        }
+
+        .additional-goal-details {
+            display: none;
+            flex-direction: column;
+            margin-top: -20px;
+            margin-bottom: 20px;
+        }
+
+        .additional_goal_details input, .additional_goal_details select {
+            border-radius: 10px;
+            border: 1px solid #ccc;
         }
 
         .goal-list {
@@ -111,18 +186,31 @@
         .tabs {
             display: flex;
             justify-content: space-around;
-            margin-bottom: 20px;
+            z-index: 1;
         }
 
-        .tab {
+        .goals-tab {
             padding: 15px 20px;
             background-color: #f0e6e9;
-            border-radius: 15px 15px 0 0;
+            border-radius: 30px 0 0 0;
             cursor: pointer;
             flex: 1;
             text-align: center;
             transition: background-color 0.3s ease;
             border: none;
+            font-size: 16px
+        }
+
+        .completed-tab {
+            padding: 15px 20px;
+            background-color: #f0e6e9;
+            border-radius: 0 30px 0 0;
+            cursor: pointer;
+            flex: 1;
+            text-align: center;
+            transition: background-color 0.3s ease;
+            border: none;
+            font-size: 16px;
         }
 
         .active-tab {
@@ -131,26 +219,11 @@
             font-weight: bold;
         }
 
-        .move-button {
-            padding: 8px 15px;
-            border-radius: 10px;
-            border: none;
-            background-color: #94b472;
-            color: white;
-            font-size: 14px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .move-button:hover {
-            background-color: #45a049;
-        }
-
         .move-icon {
             width: 30px;
             height: 30px;
             border-radius: 50%;
-            background-color: #4CAF50;
+            background-color: #bdd8a1;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -159,27 +232,13 @@
         }
 
         .move-icon:hover {
-            background-color: #45a049;
+            background-color: #7fa85e;
         }
 
         .move-icon:before {
             content: '✓';
             font-size: 20px;
             color: white;
-        }
-
-        .detailed-goal-form {
-            display: none;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .detailed-goal-form input, .detailed-goal-form select {
-            flex: 1;
-            padding: 10px;
-            border-radius: 10px;
-            border: 1px solid #ccc;
         }
 
         .fade-out {
@@ -196,36 +255,43 @@
             <button class="section-button" onclick="openForm()">Add New Goal</button>
 
             <div class="goals-form-popup" id="goalsForm">
+                <div class="cancel-btn-container">
+                    <h2>New Goal</h2>
+                    <button class="cancel-btn" onclick="closeForm()">x</button>
+                </div>
                 
                 <form class="goal-input" onsubmit="event.preventDefault(); addGoal();">
+                    <!-- goal title/short descriptor -->
                     <input type="text" id="goalText" placeholder="Enter your goal...">
-                    <button type="submit">+</button>
-                
-                    <button type="button" class="move-button" onclick="toggleDetailedGoalForm()">Set Detailed Goal</button>
-            
-                    <div class="detailed-goal-form" id="detailedGoalForm">
-                        <input type="text" id="detailedGoalText" placeholder="Enter goal description...">
+                    
+                    <!-- add additional information -->
+                    <button class="additional-details-btn" type="button" onclick="toggleAdditionalGoalsForm()">Add Additional Details</button>
+                    
+                    <div class="additional-goal-details" id="additionalGoalsForm">
                         <select id="goalType">
+                            <option value="None">N/A</option>
                             <option value="Exercise">Exercise</option>
                             <option value="Weight">Weight</option>
                             <option value="Nutrition">Nutrition</option>
                             <option value="Consistency">Consistency</option>
                         </select>
                         <input type="date" id="targetDate">
-                        <button type="button" class="move-button" onclick="addDetailedGoal()">Add Detailed Goal</button>
+                    
                     </div>
+
+                    <!-- submit goal -->
+                    <button class="submit-btn" type="submit">Add Goal</button>
                 </form>
-                
             </div>
         </div>
 
         <div class="container">
             <div class="tabs">
-                <button type="button" id="addGoalTab" class="tab active-tab" onclick="showTab('add')">Add Goal</button>
-                <button type="button" id="completedGoalTab" class="tab" onclick="showTab('completed')">Completed Goals</button>
+                <button type="button" id="addGoalTab" class="goals-tab active-tab" onclick="showTab('add')">Goals In Progress</button>
+                <button type="button" id="completedGoalTab" class="completed-tab" onclick="showTab('completed')">Completed Goals</button>
             </div>
             <div id="goalInProgressSection" class="box">
-                <h2>Add a Goal</h2>
+                <h2>In Progress</h2>
                 <div class="goal-list" id="goalList"></div>
             </div>
             <div id="completedGoalSection" class="box" style="display: none;">
@@ -280,20 +346,24 @@
             document.getElementById("goalsForm").style.display = "none";
         }
     
-        function toggleDetailedGoalForm() {
-            const form = document.getElementById('detailedGoalForm');
+        function toggleAdditionalGoalsForm() {
+            const form = document.getElementById('additionalGoalsForm');
             form.style.display = form.style.display === 'none' || form.style.display === '' ? 'flex' : 'none';
         }
     
         function addGoal() {
             const goalText = document.getElementById("goalText").value;
-    
+            const goalType = document.getElementById("goalType").value;
+            const targetDate = document.getElementById("targetDate").value;
+
             if (goalText.trim() === "") return;
     
             const goal = {
                 text: goalText,
                 completed: false,
-                type: 'simple'
+                type: ((goalType === "None" && targetDate === "") ? 'simple' : 'detailed'),
+                category: ((goalType !== "None") ? goalType : NaN),
+                date: ((targetDate !== "") ? targetDate : NaN)
             };
     
             const goals = JSON.parse(localStorage.getItem('goals')) || [];
@@ -305,32 +375,32 @@
             closeForm();
         }
     
-        function addDetailedGoal() {
-            const detailedGoalText = document.getElementById("detailedGoalText").value;
-            const goalType = document.getElementById("goalType").value;
-            const targetDate = document.getElementById("targetDate").value;
+        // function addDetailedGoal() {
+        //     const detailedGoalText = document.getElementById("detailedGoalText").value;
+        //     const goalType = document.getElementById("goalType").value;
+        //     const targetDate = document.getElementById("targetDate").value;
     
-            if (detailedGoalText.trim() === "") return;
+        //     if (detailedGoalText.trim() === "") return;
     
-            const goal = {
-                text: detailedGoalText,
-                completed: false,
-                type: 'detailed',
-                category: goalType,
-                date: targetDate
-            };
+        //     const goal = {
+        //         text: detailedGoalText,
+        //         completed: false,
+        //         type: 'detailed',
+        //         category: goalType,
+        //         date: targetDate
+        //     };
     
-            const goals = JSON.parse(localStorage.getItem('goals')) || [];
-            goals.push(goal);
-            localStorage.setItem('goals', JSON.stringify(goals));
-            renderActiveGoals();
+        //     const goals = JSON.parse(localStorage.getItem('goals')) || [];
+        //     goals.push(goal);
+        //     localStorage.setItem('goals', JSON.stringify(goals));
+        //     renderActiveGoals();
     
-            document.getElementById("detailedGoalText").value = "";
-            document.getElementById("targetDate").value = "";
-            toggleDetailedGoalForm();
+        //     document.getElementById("detailedGoalText").value = "";
+        //     document.getElementById("targetDate").value = "";
+        //     toggleAdditionalGoalsForm();
 
-            closeForm();
-        }
+        //     closeForm();
+        // }
     
         function moveToCompleted(index, button) {
             const goals = JSON.parse(localStorage.getItem('goals')) || [];

@@ -45,7 +45,7 @@
         }
 
         .results-container {
-            height: 350px;
+            height: 360px;
             width: 560px;
             margin: auto;
             background-color: #f0e6e9;
@@ -178,7 +178,7 @@
 
         .exercise-name {
             font-weight: bold;
-            font-size: 16px;
+            font-size: 18px;
             color: #333;
         }
 
@@ -287,17 +287,17 @@
                     <!-- these are radio buttons -->
                     <div class="radiobtn">
                         <input type="radio" class="easybtn" name="difficulty" id="easy" value="Easy"/>
-                        <label for="easy">Easy</label>
+                        <label for="easy" style="font-size: 18px">Easy</label>
                     </div>
                     
                     <div class="radiobtn">
                         <input type="radio" class="mediumbtn" name="difficulty" id="medium" value="Medium"/>
-                        <label for="medium">Medium</label>
+                        <label for="medium" style="font-size: 18px">Medium</label>
                     </div>
 
                     <div class="radiobtn">
                         <input type="radio" class="hardbtn" name="difficulty" id="hard" value="Hard"/>
-                        <label for="hard">Hard</label>
+                        <label for="hard" style="font-size: 18px">Hard</label>
                     </div>
                 </form>
             </div>
@@ -308,22 +308,22 @@
                     <!-- these are checkboxes -->
                     <div class="filter-checkbox">
                         <input type="checkbox" class="filter" id="cardio" value="Cardio">
-                        <label for="cardio">Cardio</label>
+                        <label for="cardio" style="font-size: 18px">Cardio</label>
                     </div>
                     
                     <div class="filter-checkbox">
                         <input type="checkbox" class="filter" id="bodyweight" value="Bodyweight">
-                        <label for="bodyweight">Bodyweight</label>
+                        <label for="bodyweight" style="font-size: 18px">Bodyweight</label>
                     </div>
 
                     <div class="filter-checkbox">
                         <input type="checkbox" class="filter" id="weights" value="Weights">
-                        <label for="weights">Weights</label>
+                        <label for="weights" style="font-size: 18px">Weights</label>
                     </div>
                     
                     <div class="filter-checkbox">
                         <input type="checkbox" class="filter" id="favorites" value="favorites">
-                        <label for="favorites">Favorites</label>
+                        <label for="favorites" style="font-size: 18px">Favorites</label>
                     </div>
                 </form>
             </div>
@@ -387,7 +387,7 @@
                     displayExercises(filteredExercises);
                 } catch (error) {
                     console.error('Error loading exercises:', error);
-                    document.getElementById('exercise-list').innerHTML = '<div class="no-results">Error loading exercises</div>';
+                    document.getElementById('exercise-list').innerHTML = '<div class="no-results" style="font-size: 18px" >Error loading exercises</div>';
                 }
             }
 
@@ -397,7 +397,7 @@
                 exerciseList.innerHTML = '';
 
                 if (exercises.length === 0) {
-                    exerciseList.innerHTML = '<div class="no-results">No exercises match your filters</div>';
+                    exerciseList.innerHTML = '<div class="no-results" style="font-size: 18px">No exercises match your filters</div>';
                     return;
                 }
 

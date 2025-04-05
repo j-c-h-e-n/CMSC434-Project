@@ -122,6 +122,12 @@
             font-weight: bold;
             justify-content: center;
             align-items: center;
+            transition: background-color 0.3s ease; 
+        }
+
+        .add-button:hover {
+            background-color: #7fa85e;  
+            color: black; 
         }
 
         .modal {
@@ -198,7 +204,7 @@
         #mealList li, #mealList p, #dayContent1 p {
             width: 100%;
             padding: 10px;
-            background-color: #fff6f4;  /* Changed from #d9d9d9 to match workouts */
+            background-color: #fff6f4;  
             margin: 5px 0;
             border-radius: 10px;
             box-sizing: border-box;
@@ -209,26 +215,37 @@
             justify-content: space-between;
             align-items: center;
             width: 100%;
-            padding: 10px;
-            background-color: #fff6f4;  /* Changed from #d9d9d9 to match workouts */
+            padding: 15px;    
+            background-color: #fff6f4;
             margin: 5px 0;
             border-radius: 10px;
             box-sizing: border-box;
         }
 
+        .meal-item > div:last-child {
+            display: flex;
+            gap: 10px;       
+            align-items: center;
+        }
+
         .delete-button {
-            background-color: #d88c8c;  /* Changed from red to match workout delete button */
+            background-color: #d88c8c;
             color: white;
             border: none;
             border-radius: 50%;
-            width: 24px;
-            height: 24px;
+            width: 28px;
+            height: 28px;
             cursor: pointer;
-            transition: background-color 0.2s ease;  /* Added transition for hover effect */
+            transition: background-color 0.2s ease;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 5px; 
         }
 
         .delete-button:hover {
-            background-color: #b35f5f;  /* Added hover state to match workout delete button */
+            background-color: #b35f5f;
         }
 
         .workout-item {
@@ -265,13 +282,13 @@
             position: absolute;
             top: -5px;
             right: -5px;
-            width: 24px;
-            height: 24px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             background-color: #d88c8c;
             color: white;
             border: none;
-            font-size: 18px;
+            font-size: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -354,17 +371,18 @@
         .edit-exercise-btn {
             background-color: #bdd8a1;
             border: none;
-            border-radius: 12px;  /* Reduced from 15px */
-            padding: 3px 8px;     /* Reduced from 5px 10px */
-            font-size: 14px;      /* Reduced from 18px */
+            border-radius: 12px;
+            padding: 8px 16px;  /* Increased from 5px 12px */
+            font-size: 18px;   /* Increased from 16px */
             cursor: pointer;
             transition: background-color 0.3s ease;
-            color: #2c3e50;
+            color: black;
+            height: 35px;     /* Added fixed height */
         }
         
         .edit-exercise-btn:hover {
             background-color: #7fa85e;
-            color: white;
+            color: black;
         }
         
         .edit-form {
@@ -638,7 +656,7 @@
                                     html += `
                                         <div class="exercise-item-tracking" id="exercise-${day}-${index}-${exerciseIndex}">
                                             <div class="exercise-actions">
-                                                <button class="edit-exercise-btn" onclick="showEditForm('${day}', ${index}, ${exerciseIndex})">Edit Exercise</button>
+                                                <button class="edit-exercise-btn" onclick="showEditForm('${day}', ${index}, ${exerciseIndex})">Edit</button>
                                             </div>
                                             <div class="exercise-name-tracking">${exercise.name}</div>
                                             <div class="exercise-tag-container">
@@ -677,7 +695,7 @@
                                         ${meal.calories} calories
                                     </div>
                                     <div>
-                                        <button class="edit-exercise-btn" onclick="showEditMealForm('${day}', ${index})">Edit Meal</button>
+                                        <button class="edit-exercise-btn" onclick="showEditMealForm('${day}', ${index})">Edit</button>
                                         <button onclick="deleteMeal('${day}', ${index})" class="delete-button">&times;</button>
                                     </div>
                                 </li>

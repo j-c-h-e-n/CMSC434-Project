@@ -198,7 +198,7 @@
         #mealList li, #mealList p, #dayContent1 p {
             width: 100%;
             padding: 10px;
-            background-color: #d9d9d9;
+            background-color: #fff6f4;  /* Changed from #d9d9d9 to match workouts */
             margin: 5px 0;
             border-radius: 10px;
             box-sizing: border-box;
@@ -210,20 +210,25 @@
             align-items: center;
             width: 100%;
             padding: 10px;
-            background-color: #d9d9d9;
+            background-color: #fff6f4;  /* Changed from #d9d9d9 to match workouts */
             margin: 5px 0;
             border-radius: 10px;
             box-sizing: border-box;
         }
 
         .delete-button {
-            background: red;
+            background-color: #d88c8c;  /* Changed from red to match workout delete button */
             color: white;
             border: none;
             border-radius: 50%;
             width: 24px;
             height: 24px;
             cursor: pointer;
+            transition: background-color 0.2s ease;  /* Added transition for hover effect */
+        }
+
+        .delete-button:hover {
+            background-color: #b35f5f;  /* Added hover state to match workout delete button */
         }
 
         .workout-item {
@@ -349,9 +354,9 @@
         .edit-exercise-btn {
             background-color: #bdd8a1;
             border: none;
-            border-radius: 15px;
-            padding: 5px 10px;
-            font-size: 18px;
+            border-radius: 12px;  /* Reduced from 15px */
+            padding: 3px 8px;     /* Reduced from 5px 10px */
+            font-size: 14px;      /* Reduced from 18px */
             cursor: pointer;
             transition: background-color 0.3s ease;
             color: #2c3e50;
@@ -401,6 +406,28 @@
         
         .cancel-btn:hover {
             background-color: #aaa;
+        }
+
+        .meal-item .edit-form {
+            width: 100%;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .meal-item .edit-form input {
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .meal-item .edit-form input[type="text"] {
+            width: 150px;
+        }
+
+        .meal-item .edit-form input[type="number"] {
+            width: 80px;
         }
     </style>
 </head>
@@ -643,13 +670,16 @@
                     if (meals.length > 0) {
                         mealList.innerHTML = meals
                             .map((meal, index) => `
-                                <li class="meal-item">
+                                <li class="meal-item" id="meal-${day}-${index}">
                                     <div>
                                         <strong>${meal.name}</strong>
                                         <br>
                                         ${meal.calories} calories
                                     </div>
-                                    <button onclick="deleteMeal('${day}', ${index})" class="delete-button">&times;</button>
+                                    <div>
+                                        <button class="edit-exercise-btn" onclick="showEditMealForm('${day}', ${index})">Edit Meal</button>
+                                        <button onclick="deleteMeal('${day}', ${index})" class="delete-button">&times;</button>
+                                    </div>
                                 </li>
                             `)
                             .join("");
@@ -733,6 +763,66 @@
                     const exerciseItem = document.getElementById(`exercise-${day}-${workoutIndex}-${exerciseIndex}`);
                     const originalContent = exerciseItem.getAttribute('data-original-content');
                     exerciseItem.innerHTML = originalContent;
+                }
+
+                function showEditMealForm(day, mealIndex) {
+                    const mealItem = document.getElementById(`meal-${day}-${mealIndex}`);
+                    const meal = dayData[day].meals[mealIndex];
+                    
+                    // Store original content
+                    const originalContent = mealItem.innerHTML;
+                    mealItem.setAttribute('data-original-content', originalContent);
+                    
+                    // Create edit form
+                    const editForm = document.createElement('div');
+                    editForm.className = 'edit-form';
+                    editForm.innerHTML = `
+                        <div>
+                            <label for="edit-meal-name">Name:</label>
+                            <input type="text" id="edit-meal-name" value="${meal.name}">
+                        </div>
+                        <div>
+                            <label for="edit-calories">Calories:</label>
+                            <input type="number" id="edit-calories" value="${meal.calories}" min="0">
+                        </div>
+                        <button class="save-btn" onclick="saveMealChanges('${day}', ${mealIndex})">Save</button>
+                        <button class="cancel-btn" onclick="cancelMealEdit('${day}', ${mealIndex})">Cancel</button>
+                    `;
+                    
+                    // Replace content with form
+                    mealItem.innerHTML = '';
+                    mealItem.appendChild(editForm);
+                }
+
+                function saveMealChanges(day, mealIndex) {
+                    const mealItem = document.getElementById(`meal-${day}-${mealIndex}`);
+                    const meal = dayData[day].meals[mealIndex];
+                    
+                    // Get new values
+                    const newName = document.getElementById('edit-meal-name').value.trim();
+                    const newCalories = parseInt(document.getElementById('edit-calories').value);
+                    
+                    // Validate input
+                    if (!newName || isNaN(newCalories) || newCalories < 0) {
+                        alert('Please enter valid values for meal name and calories');
+                        return;
+                    }
+                    
+                    // Update meal data
+                    meal.name = newName;
+                    meal.calories = newCalories;
+                    
+                    // Save to localStorage
+                    localStorage.setItem('dayData', JSON.stringify(dayData));
+                    
+                    // Refresh display
+                    updateMealsTab(day);
+                }
+
+                function cancelMealEdit(day, mealIndex) {
+                    const mealItem = document.getElementById(`meal-${day}-${mealIndex}`);
+                    const originalContent = mealItem.getAttribute('data-original-content');
+                    mealItem.innerHTML = originalContent;
                 }
             </script>
 

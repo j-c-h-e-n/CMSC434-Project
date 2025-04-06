@@ -603,57 +603,65 @@
         function updateTrackedGoals() {
             const goals = JSON.parse(localStorage.getItem('goals')) || [];
             const dayData = JSON.parse(localStorage.getItem('dayData')) || {};
+            const currentWorkouts = countCompletedWorkouts();
             let hasUpdates = false;
 
             goals.forEach((goal, index) => {
-                if (!goal.completed && goal.tracking && goal.tracking.metric === 'Calories') {
-                    // Initialize tracking if needed
-                    if (!goal.tracking.meals) {
-                        goal.tracking.meals = [];
-                        goal.tracking.current = 0;
-                    }
-
-                    // Get all current meals from dayData
-                    const currentMeals = new Map();
-                    Object.values(dayData).forEach(day => {
-                        if (day.meals) {
-                            day.meals.forEach(meal => {
-                                if (meal.id > goal.tracking.createdAt) {
-                                    currentMeals.set(meal.id, meal);
-                                }
-                            });
+                if (!goal.completed && goal.tracking) {
+                    if (goal.tracking.metric === 'Calories') {
+                        // Initialize tracking if needed
+                        if (!goal.tracking.meals) {
+                            goal.tracking.meals = [];
+                            goal.tracking.current = 0;
                         }
-                    });
 
-                    // Reset current progress
-                    goal.tracking.current = 0;
+                        // Get all current meals from dayData
+                        const currentMeals = new Map();
+                        Object.values(dayData).forEach(day => {
+                            if (day.meals) {
+                                day.meals.forEach(meal => {
+                                    if (meal.id > goal.tracking.createdAt) {
+                                        currentMeals.set(meal.id, meal);
+                                    }
+                                });
+                            }
+                        });
 
-                  
-                    // Add any new meals
-                    currentMeals.forEach(meal => {
-                        if (!goal.tracking.meals.some(trackedMeal => trackedMeal.id === meal.id)) {
-                            goal.tracking.meals.push({
-                                id: meal.id,
-                                calories: meal.calories
-                            });
-                            goal.tracking.current += meal.calories;
+                        // Reset current progress
+                        goal.tracking.current = 0;
+
+                        // Add any new meals
+                        currentMeals.forEach(meal => {
+                            if (!goal.tracking.meals.some(trackedMeal => trackedMeal.id === meal.id)) {
+                                goal.tracking.meals.push({
+                                    id: meal.id,
+                                    calories: meal.calories
+                                });
+                                goal.tracking.current += meal.calories;
+                                hasUpdates = true;
+                            }
+                        });
+
+                        // Update tracked meals list and recalculate total
+                        goal.tracking.meals = goal.tracking.meals.filter(trackedMeal => {
+                            const currentMeal = currentMeals.get(trackedMeal.id);
+                            if (currentMeal) {
+                                // Only count calories for meals that were already being tracked
+                                goal.tracking.current += trackedMeal.calories;
+                                return true;
+                            }
+                            // Remove meal if it was deleted
+                            hasUpdates = true;
+                            return false;
+                        });
+                    } else if (goal.tracking.metric === 'Workouts') {
+                        // Calculate workouts completed since goal creation
+                        const workoutsSinceStart = currentWorkouts - goal.tracking.startingWorkoutCount;
+                        if (goal.tracking.current !== workoutsSinceStart) {
+                            goal.tracking.current = workoutsSinceStart;
                             hasUpdates = true;
                         }
-                    });
-
-                      // Update tracked meals list and recalculate total
-                    goal.tracking.meals = goal.tracking.meals.filter(trackedMeal => {
-                        const currentMeal = currentMeals.get(trackedMeal.id);
-                        if (currentMeal) {
-                            // Only count calories for meals that were already being tracked
-                            goal.tracking.current += trackedMeal.calories;
-                            return true;
-                        }
-                        // Remove meal if it was deleted
-                        hasUpdates = true;
-                        return false;
-                    });
-
+                    }
 
                     // Check if goal is reached
                     if (goal.tracking.current >= goal.tracking.target) {

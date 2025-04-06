@@ -269,13 +269,13 @@
             font-weight: bold;
             font-size: 16px;
             color: #333;
-            padding-right: 30px; /* Make space for delete button */
+            padding-right: 30px; 
         }
 
         .workout-summary {
             font-size: 14px;
             color: #666;
-            padding-right: 30px; /* Add padding to ensure text doesn't overlap with delete button */
+            padding-right: 30px; 
         }
 
         .workout-delete-btn {
@@ -372,12 +372,11 @@
             background-color: #bdd8a1;
             border: none;
             border-radius: 12px;
-            padding: 8px 16px;  /* Increased from 5px 12px */
-            font-size: 18px;   /* Increased from 16px */
-            cursor: pointer;
+            padding: 8px 16px;  
+            font-size: 18px;   
             transition: background-color 0.3s ease;
             color: black;
-            height: 35px;     /* Added fixed height */
+            height: 35px;     
         }
         
         .edit-exercise-btn:hover {
@@ -588,38 +587,69 @@
                         }
                     });
 
-                    saveMealButton.addEventListener("click", () => {
-                        const mealName = mealNameInput.value.trim();
-                        const mealCalories = mealCaloriesInput.value.trim();
-
-                        if (mealName && mealCalories) {
-                            const selectedDay = document.querySelector('input[name="checkin"]:checked');
-                            if (!selectedDay) {
-                                alert("Please select a day first.");
-                                return;
-                            }
-
-                            const day = selectedDay.getAttribute("onclick").match(/selectDay\('(\w+)'\)/)[1];
-
-                            dayData[day].meals.push({
-                                name: mealName,
-                                calories: parseInt(mealCalories)
-                            });
-
-                            updateMealsTab(day);
-                            updateDayBoxes();
-                            localStorage.setItem("dayData", JSON.stringify(dayData));
-                            
-                            modal.style.display = "none";
-                            mealNameInput.value = "";
-                            mealCaloriesInput.value = "";
-
-                            selectDay(day);
-                        } else {
-                            alert("Please fill out all fields.");
-                        }
-                    });
+                    saveMealButton.addEventListener("click", addMeal);
                 });
+
+                function addMeal() {
+                    const mealName = document.getElementById('mealName').value.trim();
+                    const calories = parseInt(document.getElementById('mealCalories').value);
+                    
+                    if (mealName && !isNaN(calories) && calories > 0) {
+                        const now = Date.now();
+                        const meal = {
+                            id: now, // Use creation timestamp as ID
+                            name: mealName,
+                            calories: calories,
+                            date: new Date(now).toISOString()
+                        };
+
+                        const selectedDay = document.querySelector('input[name="checkin"]:checked');
+                        if (!selectedDay) {
+                            alert("Please select a day first.");
+                            return;
+                        }
+
+                        const day = selectedDay.getAttribute("onclick").match(/selectDay\('(\w+)'\)/)[1];
+
+                        dayData[day].meals.push(meal);
+
+                        // Update goals with new meal
+                        const goals = JSON.parse(localStorage.getItem('goals')) || [];
+                        let hasUpdates = false;
+
+                        goals.forEach(goal => {
+                            if (!goal.completed && goal.tracking && goal.tracking.metric === 'Calories') {
+                                // Add meal to tracking if not already present
+                                if (!goal.tracking.meals.some(trackedMeal => trackedMeal.id === meal.id)) {
+                                    goal.tracking.meals.push({
+                                        id: meal.id,
+                                        calories: meal.calories
+                                    });
+                                    goal.tracking.current += meal.calories;
+                                    hasUpdates = true;
+                                }
+                            }
+                        });
+
+                        if (hasUpdates) {
+                            localStorage.setItem('goals', JSON.stringify(goals));
+                        }
+                        updateDayBoxes();
+                        localStorage.setItem("dayData", JSON.stringify(dayData));
+                        
+                        const modal = document.getElementById("mealModal");
+                        const mealNameInput = document.getElementById("mealName");
+                        const mealCaloriesInput = document.getElementById("mealCalories");
+                        
+                        modal.style.display = "none";
+                        mealNameInput.value = "";
+                        mealCaloriesInput.value = "";
+
+                        selectDay(day);
+                    } else {
+                        alert("Please enter valid meal information.");
+                    }
+                }
 
                 function selectTab(tabIndex) {
                     document.querySelectorAll(".tab").forEach(tab => tab.classList.remove("active"));
@@ -814,9 +844,6 @@
 
                 function saveMealChanges(day, mealIndex) {
                     const mealItem = document.getElementById(`meal-${day}-${mealIndex}`);
-                    const meal = dayData[day].meals[mealIndex];
-                    
-                    // Get new values
                     const newName = document.getElementById('edit-meal-name').value.trim();
                     const newCalories = parseInt(document.getElementById('edit-calories').value);
                     
@@ -825,15 +852,43 @@
                         alert('Please enter valid values for meal name and calories');
                         return;
                     }
-                    
-                    // Update meal data
-                    meal.name = newName;
-                    meal.calories = newCalories;
-                    
-                    // Save to localStorage
+
+                    // Preserve the original meal's id and creation time
+                    const originalMeal = dayData[day].meals[mealIndex];
+                    const updatedMeal = {
+                        id: originalMeal.id,
+                        name: newName,
+                        calories: newCalories,
+                        date: originalMeal.date
+                    };
+
+                    // Update meal in dayData
+                    dayData[day].meals[mealIndex] = updatedMeal;
                     localStorage.setItem('dayData', JSON.stringify(dayData));
+
+                    // Update any goals tracking this meal
+                    const goals = JSON.parse(localStorage.getItem('goals')) || [];
+                    let hasUpdates = false;
+
+                    goals.forEach(goal => {
+                        if (!goal.completed && goal.tracking && goal.tracking.metric === 'Calories') {
+                            // Find if this meal is being tracked by this goal
+                            const trackedMealIndex = goal.tracking.meals.findIndex(meal => meal.id === updatedMeal.id);
+                            if (trackedMealIndex !== -1) {
+                                // Update the meal's calories in the goal
+                                goal.tracking.current -= goal.tracking.meals[trackedMealIndex].calories; // Remove old calories
+                                goal.tracking.meals[trackedMealIndex].calories = newCalories; // Update to new calories
+                                goal.tracking.current += newCalories; // Add new calories
+                                hasUpdates = true;
+                            }
+                        }
+                    });
+
+                    if (hasUpdates) {
+                        localStorage.setItem('goals', JSON.stringify(goals));
+                    }
                     
-                    // Refresh display
+                    // Update UI
                     updateMealsTab(day);
                 }
 

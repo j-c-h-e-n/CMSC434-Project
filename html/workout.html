@@ -682,6 +682,14 @@
                 // Add workout to tracking page data
                 addWorkoutToTracking(workout);
                 
+                // Update workout history
+                const workoutHistory = JSON.parse(localStorage.getItem('workoutHistory')) || [];
+                workoutHistory.push(workout);
+                localStorage.setItem('workoutHistory', JSON.stringify(workoutHistory));
+                
+                // Trigger storage event for goals tracking
+                localStorage.setItem('completedWorkouts', Date.now());
+                
                 // Clear current workout
                 localStorage.removeItem('currentWorkout');
                 

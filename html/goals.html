@@ -49,7 +49,38 @@
             padding: 30px;
             margin-top: -45px;
             flex-grow: 1;
+            max-height: 650px; 
+            overflow-y: auto; 
+        }
 
+        .goal-list {
+            display: flex;
+            flex-direction: column;
+            max-height: calc(100% - 100px); 
+            overflow-y: auto; 
+        }
+
+        .box, .goal-list {
+            scrollbar-width: 24px;
+            scrollbar-color: #bdd8a1 #f0e6e9;
+        }
+
+        .box::-webkit-scrollbar, .goal-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .box::-webkit-scrollbar-track, .goal-list::-webkit-scrollbar-track {
+            background: #f0e6e9;
+            border-radius: 4px;
+        }
+
+        .box::-webkit-scrollbar-thumb, .goal-list::-webkit-scrollbar-thumb {
+            background-color: #bdd8a1;
+            border-radius: 4px;
+        }
+
+        .box::-webkit-scrollbar-thumb:hover, .goal-list::-webkit-scrollbar-thumb:hover {
+            background-color: #7fa85e;
         }
 
         .goals-form-popup {
@@ -134,7 +165,7 @@
         .goal-input input {
             width: 90%;
             height: 20px;
-            margin: 0 auto; /* Centers the input horizontally */
+            margin: 0 auto; 
         }
 
         .additional-details-btn {
@@ -147,7 +178,7 @@
             transition: background-color 0.3s;
             height: 42px;
             width: 80px;
-            margin: 0 auto; /* Centers the button horizontally */
+            margin: 0 auto; 
         }
 
         .additional-details-btn:hover {
@@ -157,8 +188,8 @@
         .additional-goal-details {
             display: flex;
             flex-direction: column;
-            gap: 5px;  /* Reduced from 10px */
-            padding: 5px;  /* Reduced from 10px */
+            gap: 5px;  
+            padding: 5px;  
             margin-top: -20px;
             margin-bottom: 20px;
         }
@@ -167,7 +198,7 @@
             left: 0;
             padding-left: 6px;
             font-size: 18px;
-            margin: 10px 0;  /* Adjusted margins */
+            margin: 10px 0; 
         }
 
         .goal-details-inputs {
@@ -193,9 +224,32 @@
             margin: 0 auto;
         }
 
-        .goal-list {
+        .tracking-inputs {
             display: flex;
             flex-direction: column;
+            gap: 5px;
+            padding: 5px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tracking-details-inputs {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .tracking-details-inputs select, .tracking-details-inputs input {
+            padding: 8px;
+            width: 220px;
+            height: 40px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            margin: 0 auto;
+        }
+
+        .tracking-details-inputs input[type="number"] {
+            height: 22px;
         }
 
         .goal-item, .detailed-goal-item {
@@ -219,6 +273,8 @@
             font-size: 14px;
             color: #555;
             margin-top: 5px;
+            text-align: left;
+            width: 100%;
         }
 
         .tabs {
@@ -307,14 +363,27 @@
                     <div class="additional-goal-details" id="additionalGoalsForm">
                         <h2>Advanced Settings (Optional)</h2> 
                         <div class="goal-details-inputs">
-                            <select id="goalType">
-                                <option value="None">N/A</option>
+                            <select id="goalType" onchange="toggleTrackingInputs()">
+                                <option value="None">No Type</option>
                                 <option value="Exercise">Exercise</option>
                                 <option value="Weight">Weight</option>
                                 <option value="Nutrition">Nutrition</option>
                                 <option value="Consistency">Consistency</option>
                             </select>
                             <input type="date" id="targetDate" placeholder="Target Date">
+                        </div>
+
+                        <!-- Add new tracking section -->
+                        <h2>Tracking (Optional)</h2>
+                        <div class="tracking-inputs" id="trackingForm">
+                            <div class="tracking-details-inputs">
+                                <select id="trackingMetric">
+                                    <option value="None">Select Metric</option>
+                                    <option value="Workouts">Number of Workouts</option>
+                                    <option value="Calories">Calorie Intake</option>
+                                </select>
+                                <input type="number" id="targetValue" placeholder="Target Amount" min="0">
+                            </div>
                         </div>
                     </div>
                     <!-- submit goal -->
@@ -384,62 +453,67 @@
             document.getElementById("goalsForm").style.display = "none";
         }
     
-        // Remove or comment out this function
-        // function toggleAdditionalGoalsForm() {
-        //     const form = document.getElementById('additionalGoalsForm');
-        //     form.style.display = form.style.display === 'none' || form.style.display === '' ? 'flex' : 'none';
-        // }
+        function toggleTrackingInputs() {
+            const goalType = document.getElementById('goalType').value;
+            const trackingForm = document.getElementById('trackingForm');
+            trackingForm.style.display = goalType !== 'None' ? 'flex' : 'none';
+        }
     
         function addGoal() {
             const goalText = document.getElementById("goalText").value;
             const goalType = document.getElementById("goalType").value;
             const targetDate = document.getElementById("targetDate").value;
+            const trackingMetric = document.getElementById("trackingMetric").value;
+            const targetValue = document.getElementById("targetValue").value;
 
-            if (goalText.trim() === "") return;
-    
+            // Basic validation
+            if (goalText.trim() === "") {
+                alert("Please enter a goal description");
+                return;
+            }
+
+            // If metric is selected, validate all tracking fields
+            if (trackingMetric !== "None") {
+                if (!targetValue || targetValue <= 0) {
+                    alert("Please enter a valid target amount greater than 0");
+                    return;
+                }
+            }
+
             const goal = {
                 text: goalText,
                 completed: false,
                 type: ((goalType === "None" && targetDate === "") ? 'simple' : 'detailed'),
                 category: ((goalType !== "None") ? goalType : NaN),
-                date: ((targetDate !== "") ? targetDate : NaN)
+                date: ((targetDate !== "") ? targetDate : "No Date")
             };
-    
+
+            // Add tracking information if all required fields are filled
+            if (trackingMetric !== "None" && targetValue) {
+                goal.tracking = {
+                    metric: trackingMetric,
+                    target: parseFloat(targetValue),
+                    current: 0,
+                    meals: [], 
+                    startingWorkoutCount: trackingMetric === 'Workouts' ? countCompletedWorkouts() : 0,
+                    createdAt: Date.now() 
+                };
+            }
+
             const goals = JSON.parse(localStorage.getItem('goals')) || [];
             goals.push(goal);
             localStorage.setItem('goals', JSON.stringify(goals));
             renderActiveGoals();
+
+            // Reset form
             document.getElementById("goalText").value = "";
+            document.getElementById("targetValue").value = "";
+            document.getElementById("trackingMetric").value = "None";
+            document.getElementById("goalType").value = "None";
+            document.getElementById("targetDate").value = "";
 
             closeForm();
         }
-    
-        // function addDetailedGoal() {
-        //     const detailedGoalText = document.getElementById("detailedGoalText").value;
-        //     const goalType = document.getElementById("goalType").value;
-        //     const targetDate = document.getElementById("targetDate").value;
-    
-        //     if (detailedGoalText.trim() === "") return;
-    
-        //     const goal = {
-        //         text: detailedGoalText,
-        //         completed: false,
-        //         type: 'detailed',
-        //         category: goalType,
-        //         date: targetDate
-        //     };
-    
-        //     const goals = JSON.parse(localStorage.getItem('goals')) || [];
-        //     goals.push(goal);
-        //     localStorage.setItem('goals', JSON.stringify(goals));
-        //     renderActiveGoals();
-    
-        //     document.getElementById("detailedGoalText").value = "";
-        //     document.getElementById("targetDate").value = "";
-        //     toggleAdditionalGoalsForm();
-
-        //     closeForm();
-        // }
     
         function moveToCompleted(index, button) {
             const goals = JSON.parse(localStorage.getItem('goals')) || [];
@@ -455,17 +529,39 @@
             }, 500);
         }
     
+        function countCompletedWorkouts() {
+            const workouts = JSON.parse(localStorage.getItem('workoutHistory')) || [];
+            return workouts.length;
+        }
+    
         function renderActiveGoals() {
             const goalList = document.getElementById("goalList");
             goalList.innerHTML = "";
             const goals = JSON.parse(localStorage.getItem('goals')) || [];
+            
             goals.forEach((goal, index) => {
                 if (!goal.completed) {
                     const goalItem = document.createElement("div");
                     goalItem.classList.add(goal.type === 'detailed' ? "detailed-goal-item" : "goal-item");
+                    
+                    let details = '';
+                    if (goal.tracking || goal.type === 'detailed') {
+                        let trackingInfo = goal.tracking ? 
+                            `Progress: ${goal.tracking.current}/${goal.tracking.target} ${goal.tracking.metric}` : '';
+                        let categoryInfo = goal.category && goal.category !== "None" ? `${goal.category} | ` : '';
+                        let dateInfo = goal.date !== "No Date" ? `Target Date: ${goal.date}` : '';
+                        
+                        let mainInfo = `${categoryInfo}${dateInfo}`.trim();
+                        details = `<div class="goal-details">
+                            ${mainInfo}${trackingInfo ? (mainInfo ? '<br>' : '') + trackingInfo : ''}
+                        </div>`;
+                    }
+
                     goalItem.innerHTML = `
-                        <span>${goal.text}</span>
-                        ${goal.type === 'detailed' ? `<div class="goal-details">${goal.category} | Target Date: ${goal.date}</div>` : ''}
+                        <div style="display: flex; flex-direction: column; align-items: flex-start; flex: 1;">
+                            <div>${goal.text}</div>
+                            ${details}
+                        </div>
                         <div class="move-icon" onclick="moveToCompleted(${index}, this)"></div>
                     `;
                     goalList.appendChild(goalItem);
@@ -481,16 +577,112 @@
                 if (goal.completed) {
                     const goalItem = document.createElement("div");
                     goalItem.classList.add(goal.type === 'detailed' ? "detailed-goal-item" : "goal-item");
+                    
+                    let details = '';
+                    if (goal.tracking || goal.type === 'detailed') {
+                        let trackingInfo = goal.tracking ? 
+                            `Progress: ${goal.tracking.current}/${goal.tracking.target} ${goal.tracking.metric}` : '';
+                        let categoryInfo = goal.category && goal.category !== "None" ? `${goal.category} | ` : '';
+                        let dateInfo = goal.date !== "No Date" ? `Target Date: ${goal.date}` : '';
+                        
+                        let mainInfo = `${categoryInfo}${dateInfo}`.trim();
+                        details = `<div class="goal-details">
+                            ${mainInfo}${trackingInfo ? (mainInfo ? '<br>' : '') + trackingInfo : ''}
+                        </div>`;
+                    }
+
                     goalItem.innerHTML = `
                         <span>${goal.text}</span>
-                        ${goal.type === 'detailed' ? `<div class="goal-details">${goal.category} | Target Date: ${goal.date}</div>` : ''}
+                        ${details}
                     `;
                     completedGoalList.appendChild(goalItem);
                 }
             });
         }
     
-        window.onload = renderActiveGoals; 
+        function updateTrackedGoals() {
+            const goals = JSON.parse(localStorage.getItem('goals')) || [];
+            const dayData = JSON.parse(localStorage.getItem('dayData')) || {};
+            let hasUpdates = false;
+
+            goals.forEach((goal, index) => {
+                if (!goal.completed && goal.tracking && goal.tracking.metric === 'Calories') {
+                    // Initialize tracking if needed
+                    if (!goal.tracking.meals) {
+                        goal.tracking.meals = [];
+                        goal.tracking.current = 0;
+                    }
+
+                    // Get all current meals from dayData
+                    const currentMeals = new Map();
+                    Object.values(dayData).forEach(day => {
+                        if (day.meals) {
+                            day.meals.forEach(meal => {
+                                if (meal.id > goal.tracking.createdAt) {
+                                    currentMeals.set(meal.id, meal);
+                                }
+                            });
+                        }
+                    });
+
+                    // Reset current progress
+                    goal.tracking.current = 0;
+
+                  
+                    // Add any new meals
+                    currentMeals.forEach(meal => {
+                        if (!goal.tracking.meals.some(trackedMeal => trackedMeal.id === meal.id)) {
+                            goal.tracking.meals.push({
+                                id: meal.id,
+                                calories: meal.calories
+                            });
+                            goal.tracking.current += meal.calories;
+                            hasUpdates = true;
+                        }
+                    });
+
+                      // Update tracked meals list and recalculate total
+                    goal.tracking.meals = goal.tracking.meals.filter(trackedMeal => {
+                        const currentMeal = currentMeals.get(trackedMeal.id);
+                        if (currentMeal) {
+                            // Only count calories for meals that were already being tracked
+                            goal.tracking.current += trackedMeal.calories;
+                            return true;
+                        }
+                        // Remove meal if it was deleted
+                        hasUpdates = true;
+                        return false;
+                    });
+
+
+                    // Check if goal is reached
+                    if (goal.tracking.current >= goal.tracking.target) {
+                        goal.completed = true;
+                        hasUpdates = true;
+                    }
+                }
+            });
+
+            if (hasUpdates) {
+                localStorage.setItem('goals', JSON.stringify(goals));
+                renderActiveGoals();
+            }
+        }
+
+        // Update event listeners
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'workoutHistory' || e.key === 'completedWorkouts' || e.key === 'dayData') {
+                updateTrackedGoals();
+            }
+        });
+
+        // Call updateTrackedGoals when page loads and periodically
+        document.addEventListener('DOMContentLoaded', () => {
+            renderActiveGoals();
+            updateTrackedGoals();
+            // Check for updates more frequently
+            setInterval(updateTrackedGoals, 1000);
+        });
     </script>    
 </body>
 </html>

@@ -368,8 +368,9 @@
             async function loadExercises() {
                 try {
                     // First, check if exercises exist in localStorage
-                    const storedExercises = localStorage.getItem('exercises');
-                    
+                    // const storedExercises = localStorage.getItem('exercises');
+                    const storedExercises = exercises;
+                    console.log(storedExercises);
                     if (storedExercises) {
                         // If exercises exist in localStorage, use them
                         allExercises = JSON.parse(storedExercises);
@@ -579,6 +580,175 @@
             window.addEventListener('DOMContentLoaded', function() {
                 loadExercises();
             });
+
+
+            const exercises = `[
+                    {
+                    "id": 1,
+                    "name": "Push-ups",
+                    "type": "Bodyweight",
+                    "targetMuscles": ["Chest", "Shoulders", "Triceps"],
+                    "difficulty": "Medium",
+                    "description": "Standard push-up with hands shoulder-width apart, lowering body until chest nearly touches the floor.",
+                    "caloriesPerMinute": 7,
+                    "equipment": [],
+                    "favorited": false
+                    },
+                    {
+                    "id": 2,
+                    "name": "Squats",
+                    "type": "Bodyweight",
+                    "targetMuscles": ["Quadriceps", "Hamstrings", "Glutes"],
+                    "difficulty": "Medium",
+                    "description": "Stand with feet shoulder-width apart, lower body by bending knees and pushing hips back, then return to standing.",
+                    "caloriesPerMinute": 8,
+                    "equipment": [],
+                    "favorited": false
+                    },
+                    {
+                    "id": 3,
+                    "name": "Plank",
+                    "type": "Bodyweight",
+                    "targetMuscles": ["Core", "Shoulders", "Back"],
+                    "difficulty": "Medium",
+                    "description": "Hold a push-up position with arms straight, maintaining a straight line from head to heels.",
+                    "caloriesPerMinute": 5,
+                    "equipment": [],
+                    "favorited": false
+                    },
+                    {
+                    "id": 4,
+                    "name": "Bench Press",
+                    "type": "Weights",
+                    "targetMuscles": ["Chest", "Shoulders", "Triceps"],
+                    "difficulty": "Medium",
+                    "description": "Lie on a bench and press a barbell or dumbbells up and down from chest level.",
+                    "caloriesPerMinute": 8,
+                    "equipment": ["Bench", "Barbell or Dumbbells"],
+                    "favorited": false
+                    },
+                    {
+                    "id": 5,
+                    "name": "Deadlift",
+                    "type": "Weights",
+                    "targetMuscles": ["Lower Back", "Hamstrings", "Glutes", "Traps"],
+                    "difficulty": "Hard",
+                    "description": "Lift a barbell from the ground to hip level while maintaining a straight back.",
+                    "caloriesPerMinute": 9,
+                    "equipment": ["Barbell", "Weight Plates"],
+                    "favorited": false
+                    },
+                    {
+                    "id": 6,
+                    "name": "Lunges",
+                    "type": "Bodyweight",
+                    "targetMuscles": ["Quadriceps", "Hamstrings", "Glutes"],
+                    "difficulty": "Medium",
+                    "description": "Step forward with one leg, lowering hips until both knees are bent at 90-degree angles, then return and repeat with other leg.",
+                    "caloriesPerMinute": 7,
+                    "equipment": [],
+                    "favorited": false
+                    },
+                    {
+                    "id": 7,
+                    "name": "Pull-ups",
+                    "type": "Bodyweight",
+                    "targetMuscles": ["Back", "Biceps", "Shoulders"],
+                    "difficulty": "Hard",
+                    "description": "Hang from a bar with palms facing away, pull body up until chin is above the bar.",
+                    "caloriesPerMinute": 8,
+                    "equipment": ["Pull-up Bar"],
+                    "favorited": false
+                    },
+                    {
+                    "id": 8,
+                    "name": "Shoulder Press",
+                    "type": "Weights",
+                    "targetMuscles": ["Shoulders", "Triceps"],
+                    "difficulty": "Medium",
+                    "description": "Press weights from shoulder height directly upward until arms are fully extended.",
+                    "caloriesPerMinute": 7,
+                    "equipment": ["Dumbbells or Barbell"],
+                    "favorited": false
+                    },
+                    {
+                    "id": 9,
+                    "name": "Russian Twists",
+                    "type": "Bodyweight",
+                    "targetMuscles": ["Obliques", "Abs"],
+                    "difficulty": "Medium",
+                    "description": "Sit with knees bent and feet off the ground, twist torso from side to side, touching the ground beside hips.",
+                    "caloriesPerMinute": 6,
+                    "equipment": ["Optional Weight"],
+                    "favorited": false
+                    },
+                    {
+                    "id": 10,
+                    "name": "Bicep Curls",
+                    "type": "Weights",
+                    "targetMuscles": ["Biceps", "Forearms"],
+                    "difficulty": "Easy",
+                    "description": "Curl weights from a hanging position at your sides to shoulder level, keeping elbows close to body.",
+                    "caloriesPerMinute": 6,
+                    "equipment": ["Dumbbells"],
+                    "favorited": false
+                    },
+                    {
+                    "id": 11,
+                    "name": "Tricep Dips",
+                    "type": "Bodyweight",
+                    "targetMuscles": ["Triceps", "Shoulders", "Chest"],
+                    "difficulty": "Medium",
+                    "description": "Support body with hands on a bench or chair, lower body by bending elbows, then push back up.",
+                    "caloriesPerMinute": 7,
+                    "equipment": ["Bench or Chair"],
+                    "favorited": false
+                    },
+                    {
+                    "id": 12,
+                    "name": "Mountain Climbers",
+                    "type": "Cardio",
+                    "targetMuscles": ["Core", "Shoulders", "Legs"],
+                    "difficulty": "Medium",
+                    "description": "From a push-up position, alternate bringing knees toward chest in a running motion.",
+                    "caloriesPerMinute": 10,
+                    "equipment": [],
+                    "favorited": false
+                    },
+                    {
+                    "id": 13,
+                    "name": "Lat Pulldown",
+                    "type": "Weights",
+                    "targetMuscles": ["Back", "Biceps"],
+                    "difficulty": "Medium",
+                    "description": "Pull a cable attachment from overhead down to chest level while seated.",
+                    "caloriesPerMinute": 7,
+                    "equipment": ["Cable Machine"],
+                    "favorited": false
+                    },
+                    {
+                    "id": 14,
+                    "name": "Leg Press",
+                    "type": "Weights",
+                    "targetMuscles": ["Quadriceps", "Hamstrings", "Glutes"],
+                    "difficulty": "Medium",
+                    "description": "Push weight away from body using legs while seated in a leg press machine.",
+                    "caloriesPerMinute": 8,
+                    "equipment": ["Leg Press Machine"],
+                    "favorited": false
+                    },
+                    {
+                    "id": 15,
+                    "name": "Crunches",
+                    "type": "Bodyweight",
+                    "targetMuscles": ["Abs"],
+                    "difficulty": "Easy",
+                    "description": "Lie on back with knees bent, lift shoulders toward knees by contracting abdominals.",
+                    "caloriesPerMinute": 5,
+                    "equipment": [],
+                    "favorited": false
+                    }
+                    ]`;
         </script>
     </body>
 </html>

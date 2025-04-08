@@ -9,7 +9,7 @@
         width: 560px;
         margin: auto;
         background-color: #f0e6e9;
-        border-radius: 30px;
+        border-radius: 20px;
         display: flex;
       }
       .profile img {
@@ -38,13 +38,13 @@
         gap: 0px 20px; 
       }
       .status_text p {
-        font-size: 18px;
+        font-size: 20px;
       }
       .edit_btn {
         margin: 10px;
         height: 40px;
         width: 100px;
-        border-radius: 30px;
+        border-radius: 20px;
         border-color: transparent;
         align-self: self-end;
         background-color: #bdd8a1;
@@ -52,7 +52,13 @@
         justify-content: center; 
         align-items: center; 
         text-align: center;
-        font-size: 18px;
+        font-size: 20px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .edit_btn:hover {
+        background-color: #7fa85e;
       }
 
     .shortcut_container {
@@ -72,7 +78,7 @@
 
     .shortcut p {
         margin-top: 8px;
-        font-size: 18px;
+        font-size: 20px;
         text-align: center;
     }
 
@@ -80,7 +86,7 @@
         height: 150px;
         width: 150px;
         background-color: #f0e6e9;
-        border-radius: 30px;
+        border-radius: 20px;
         transition: background-color 0.3s ease;
     }
 
@@ -94,7 +100,7 @@
         margin: auto;
         margin-top: -20px;
         background-color: #f0e6e9;
-        border-radius: 30px;
+        border-radius: 20px;
         padding: 15px;
         box-sizing: border-box;
     }
@@ -120,14 +126,14 @@
     
     .summary-section {
         background-color: #fff6f4;
-        border-radius: 15px;
+        border-radius: 20px;
         padding: 10px;
         flex: 1;
         height: 100%;
         display: flex;
         flex-direction: column;
     }
-    
+
     .goal-tracker-section {
         background-color: #f0e6e9;
         border-radius: 15px;
@@ -182,14 +188,14 @@
     .loading-bar {
         background-color: #a0a0a0;
         height: 10px;
-        border-radius: 5px;
+        border-radius: 20px;
         position: relative;
     }
     
     .loading-bar-fill {
         background-color: #bdd8a1;
         height: 100%;
-        border-radius: 5px;
+        border-radius: 20px;
     }
 
     /* Goal tracker styles */
@@ -239,12 +245,12 @@
         height: 16px;
         display: inline-block;
         margin-right: 5px;
-        background-color: #bdd8a1;
-        border-radius: 50%;
+        background-color: #4c7012;
+        border-radius: 20px;
     }
     
     .meal-icon {
-        background-color: #f9f4b2;
+        background-color: #8B4513;
     }
     
     .summary-title {
@@ -268,7 +274,7 @@
     .modal-content {
         background: #f0e6e9;
         padding: 20px;
-        border-radius: 8px;
+        border-radius: 20px;
         width: 300px;
         text-align: center;
         position: relative;
@@ -308,8 +314,8 @@
         padding: 10px;
         margin: 10px 0;
         border: 1px solid black;
-        border-radius: 5px;
-        font-size: 16px;
+        border-radius: 20px;
+        font-size: 20px;
         background-color: #fff6f4;
     }
 
@@ -323,8 +329,8 @@
         padding: 10px; 
         margin: 10px 0; 
         border: 1px solid black; 
-        border-radius: 5px; 
-        font-size: 16px; 
+        border-radius: 20px; 
+        font-size: 20px; 
         background-color: #fff6f4; 
     }
 
@@ -340,9 +346,14 @@
         text-align: left;
     }
     #saveButton {
+        font-size: 20px;
         background-color: #fff6f4;
         border: 1px solid black;
-        border-radius: 10px;
+        border-radius: 20px;
+    }
+
+    #saveButton:hover {
+        background-color: #b0a6a6;
     }
 
     body.modal-open {

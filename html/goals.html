@@ -534,6 +534,15 @@
             return workouts.length;
         }
     
+        // crucial synchronization to set items for tracker display in index.html
+        function syncTrackedGoalsToLocalStorage(goalsList) {
+            // Get the existing trackedGoals from localStorage
+            const trackedGoals = goalsList;
+
+            // Update localStorage with the tracked goals
+            localStorage.setItem('trackedGoals', JSON.stringify(trackedGoals));
+        }
+
         function renderActiveGoals() {
             const goalList = document.getElementById("goalList");
             goalList.innerHTML = "";
@@ -599,15 +608,19 @@
                 }
             });
         }
-    
+
         function updateTrackedGoals() {
             const goals = JSON.parse(localStorage.getItem('goals')) || [];
             const dayData = JSON.parse(localStorage.getItem('dayData')) || {};
             const currentWorkouts = countCompletedWorkouts();
             let hasUpdates = false;
 
+            let trackedGoals = "";
             goals.forEach((goal, index) => {
                 if (!goal.completed && goal.tracking) {
+
+                    trackedGoals = trackedGoals.concat(JSON.stringify(goal));
+                    
                     if (goal.tracking.metric === 'Calories') {
                         // Initialize tracking if needed
                         if (!goal.tracking.meals) {
@@ -675,6 +688,7 @@
                 localStorage.setItem('goals', JSON.stringify(goals));
                 renderActiveGoals();
             }
+            syncTrackedGoalsToLocalStorage(trackedGoals);
         }
 
         // Update event listeners

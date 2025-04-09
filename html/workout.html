@@ -240,12 +240,11 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
             font-weight: bold;
-            color: #2c3e50;
+            color: #000;
         }
         
         .remove-exercise-btn:hover {
             background-color: #b35f5f;
-            color: #fff;
         }
         
         .workout-actions {
@@ -273,12 +272,11 @@
             transition: background-color 0.3s ease;
             font-weight: bold;
             font-size: 18px;
-            color: #2c3e50;
+            color: #000;
         }
         
         .complete-workout-btn:hover {
             background-color: #7fa85e;
-            color: #fff;
         }
         
         .end-workout-btn {
@@ -290,13 +288,12 @@
             transition: background-color 0.3s ease;
             font-weight: bold;
             font-size: 18px;
-            color: #2c3e50;
+            color: #000;
             margin: 0 10px;
         }
         
         .end-workout-btn:hover {
             background-color: #b35f5f;
-            color: #fff;
         }
         
         .checkbox-container {
@@ -603,7 +600,7 @@
                     
                     html += `
                         <div class="past-workout-item" data-id="${workout.id}">
-                            <button class="delete-workout-btn" data-id="${workout.id}">✕</button>
+                            <button class="delete-workout-btn" data-id="${workout.id}">&times;</button>
                             <div class="past-workout-info">
                                 <span class="past-workout-name">${workoutName}</span>
                                 <span class="past-workout-date">Completed: ${completedDate}</span>

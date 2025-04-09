@@ -56,31 +56,10 @@
         .goal-list {
             display: flex;
             flex-direction: column;
-            max-height: calc(100% - 100px); 
-            overflow-y: auto; 
-        }
-
-        .box, .goal-list {
-            scrollbar-width: 24px;
-            scrollbar-color: #bdd8a1 #f0e6e9;
-        }
-
-        .box::-webkit-scrollbar, .goal-list::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .box::-webkit-scrollbar-track, .goal-list::-webkit-scrollbar-track {
-            background: #f0e6e9;
-            border-radius: 4px;
-        }
-
-        .box::-webkit-scrollbar-thumb, .goal-list::-webkit-scrollbar-thumb {
-            background-color: #bdd8a1;
-            border-radius: 4px;
-        }
-
-        .box::-webkit-scrollbar-thumb:hover, .goal-list::-webkit-scrollbar-thumb:hover {
-            background-color: #7fa85e;
+            max-height: calc(100% - 100px);
+            overflow-y: auto;
+            padding-right: 10px; /* Add padding for scrollbar */
+            margin-right: -10px; /* Compensate for padding */
         }
 
         .goals-form-popup {
@@ -339,6 +318,7 @@
             opacity: 0;
             transition: opacity 0.5s ease-out;
         }
+
     </style>
 </head>
 <body>

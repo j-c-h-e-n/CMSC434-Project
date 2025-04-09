@@ -568,6 +568,107 @@
                     modal.style.display = "none";
                     document.body.classList.remove("modal-open");
                 });
+
+                function renderSummary() {
+                    let summaryTrackerHTML = "";
+                    let dayData;
+                    try {
+                        // Safely parse the localStorage data
+                        const storedData = localStorage.getItem('dayData');
+                        dayData = storedData ? JSON.parse(storedData) : {
+                            Sun: { pastWeek: [], meals: [] },
+                            Mon: { pastWeek: [], meals: [] },
+                            Tue: { pastWeek: [], meals: [] },
+                            Wed: { pastWeek: [], meals: [] },
+                            Thu: { pastWeek: [], meals: [] },
+                            Fri: { pastWeek: [], meals: [] },
+                            Sat: { pastWeek: [], meals: [] }
+                        };
+                    } catch (e) {
+                        // Fallback if JSON parsing fails
+                        console.error('Error parsing tracking data:', e);
+                        dayData = {
+                            Sun: { pastWeek: [], meals: [] },
+                            Mon: { pastWeek: [], meals: [] },
+                            Tue: { pastWeek: [], meals: [] },
+                            Wed: { pastWeek: [], meals: [] },
+                            Thu: { pastWeek: [], meals: [] },
+                            Fri: { pastWeek: [], meals: [] },
+                            Sat: { pastWeek: [], meals: [] }
+                        };
+                    }
+                    
+                    let totalWorkouts = 0;
+                    let totalMeals = 0;
+                    let daysWithData = 0;
+                    
+                    // Count workouts and meals
+                    const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+                    const activeDays = {};
+                    
+                    daysOfWeek.forEach(day => {
+                        if (dayData[day]) {
+                            const workouts = dayData[day].pastWeek ? dayData[day].pastWeek.length : 0;
+                            const meals = dayData[day].meals ? dayData[day].meals.length : 0;
+                            
+                            totalWorkouts += workouts;
+                            totalMeals += meals;
+                            
+                            activeDays[day] = {
+                                workouts: workouts,
+                                meals: meals,
+                                hasActivity: workouts > 0 || meals > 0
+                            };
+                            
+                            if (workouts > 0 || meals > 0) {
+                                daysWithData++;
+                            }
+                        }
+                    });
+                    
+                    if (daysWithData === 0) {
+                        summaryTrackerHTML = `
+                            <div class="summary-title">Weekly Overview</div>
+                            <div style="margin-top: -20px" class="empty-tracking">
+                                <p>No tracking data available yet.<br/><br/>Your workouts and meals will appear here.</p>
+                            </div>
+                        `;
+                        return summaryTrackerHTML;
+                    }
+                    
+                    // Get the active days with most activity for display (limit to 3 for space)
+                    const activeDaysSorted = daysOfWeek
+                        .filter(day => activeDays[day] && activeDays[day].hasActivity)
+                        .sort((a, b) => {
+                            const aTotal = activeDays[a].workouts + activeDays[a].meals;
+                            const bTotal = activeDays[b].workouts + activeDays[b].meals;
+                            return bTotal - aTotal;
+                        })
+                        .slice(0, 3);
+                    
+
+                    summaryTrackerHTML = `
+                        <div class="summary-title">Weekly Overview</div>
+                            <div class="summary-content">
+                                <div>
+                                    <div class="summary-stat">
+                                        <span class="stat-icon"></span>
+                                        <span>${totalWorkouts} workout${totalWorkouts !== 1 ? 's' : ''}</span>
+                                    </div>
+                                    <div class="summary-stat">
+                                        <span class="stat-icon meal-icon"></span>
+                                        <span>${totalMeals} meal${totalMeals !== 1 ? 's' : ''}</span>
+                                    </div>
+                                </div>
+                                <div class="active-days-container">
+                                    <div class="active-days-label">Active: ${daysWithData} of 7 days</div>
+                                    <div class="loading-bar">
+                                        <div class="loading-bar-fill" style="width: ${(daysWithData/7)*100}%"></div>
+                                    </div>
+                                </div>
+                            </div>`;
+                    return summaryTrackerHTML;
+                }
                 
                 function renderGoalTracker() {
                     // Get tracked goals from localStorage
@@ -657,105 +758,11 @@
                 // New code to populate tracking summary
                 function updateTrackingSummary() {
                     const trackingSummaryElement = document.getElementById('tracking-summary');
-                    
-                    let dayData;
-                    try {
-                        // Safely parse the localStorage data
-                        const storedData = localStorage.getItem('dayData');
-                        dayData = storedData ? JSON.parse(storedData) : {
-                            Sun: { pastWeek: [], meals: [] },
-                            Mon: { pastWeek: [], meals: [] },
-                            Tue: { pastWeek: [], meals: [] },
-                            Wed: { pastWeek: [], meals: [] },
-                            Thu: { pastWeek: [], meals: [] },
-                            Fri: { pastWeek: [], meals: [] },
-                            Sat: { pastWeek: [], meals: [] }
-                        };
-                    } catch (e) {
-                        // Fallback if JSON parsing fails
-                        console.error('Error parsing tracking data:', e);
-                        dayData = {
-                            Sun: { pastWeek: [], meals: [] },
-                            Mon: { pastWeek: [], meals: [] },
-                            Tue: { pastWeek: [], meals: [] },
-                            Wed: { pastWeek: [], meals: [] },
-                            Thu: { pastWeek: [], meals: [] },
-                            Fri: { pastWeek: [], meals: [] },
-                            Sat: { pastWeek: [], meals: [] }
-                        };
-                    }
-                    
-                    let totalWorkouts = 0;
-                    let totalMeals = 0;
-                    let daysWithData = 0;
-                    
-                    // Count workouts and meals
-                    const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-                    const activeDays = {};
-                    
-                    daysOfWeek.forEach(day => {
-                        if (dayData[day]) {
-                            const workouts = dayData[day].pastWeek ? dayData[day].pastWeek.length : 0;
-                            const meals = dayData[day].meals ? dayData[day].meals.length : 0;
-                            
-                            totalWorkouts += workouts;
-                            totalMeals += meals;
-                            
-                            activeDays[day] = {
-                                workouts: workouts,
-                                meals: meals,
-                                hasActivity: workouts > 0 || meals > 0
-                            };
-                            
-                            if (workouts > 0 || meals > 0) {
-                                daysWithData++;
-                            }
-                        }
-                    });
-                    
-                    if (daysWithData === 0) {
-                        trackingSummaryElement.innerHTML = `
-                            <div class="empty-tracking">
-                                <p>No tracking data available yet.</p>
-                                <p>Your workouts and meals will appear here.</p>
-                            </div>
-                        `;
-                        return;
-                    }
-                    
-                    // Get the active days with most activity for display (limit to 3 for space)
-                    const activeDaysSorted = daysOfWeek
-                        .filter(day => activeDays[day] && activeDays[day].hasActivity)
-                        .sort((a, b) => {
-                            const aTotal = activeDays[a].workouts + activeDays[a].meals;
-                            const bTotal = activeDays[b].workouts + activeDays[b].meals;
-                            return bTotal - aTotal;
-                        })
-                        .slice(0, 3);
-                    
                     let summaryHTML = `
                         <div class="tracking-widget">
                             <div class="widget-column">
                                 <div class="summary-section">
-                                    <div class="summary-title">Weekly Overview</div>
-                                    <div class="summary-content">
-                                        <div>
-                                            <div class="summary-stat">
-                                                <span class="stat-icon"></span>
-                                                <span>${totalWorkouts} workout${totalWorkouts !== 1 ? 's' : ''}</span>
-                                            </div>
-                                            <div class="summary-stat">
-                                                <span class="stat-icon meal-icon"></span>
-                                                <span>${totalMeals} meal${totalMeals !== 1 ? 's' : ''}</span>
-                                            </div>
-                                        </div>
-                                        <div class="active-days-container">
-                                            <div class="active-days-label">Active: ${daysWithData} of 7 days</div>
-                                            <div class="loading-bar">
-                                                <div class="loading-bar-fill" style="width: ${(daysWithData/7)*100}%"></div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <span>${renderSummary()}</span>
                                 </div>
                             </div>
                             <div class="widget-column">

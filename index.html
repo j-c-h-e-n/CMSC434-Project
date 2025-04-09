@@ -580,8 +580,6 @@
 
                     try {
                         const splitGoals = rawGoals.replace(/}{/g, '}|{').split('|');
-                        console.log("split goals:");
-                        console.log(splitGoals);
                         const trackedGoals = splitGoals.map(goal => JSON.parse(goal));
                     
                         // Calculate completion percentage for each goal and sort from greatest to least

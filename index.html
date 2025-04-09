@@ -152,6 +152,7 @@
 
     .goal-tracker-section::-webkit-scrollbar {
         width: 8px;
+        border-radius: 4px;
     }
 
     .goal-tracker-section::-webkit-scrollbar-track {
@@ -572,75 +573,82 @@
                     // Get tracked goals from localStorage
                     let rawGoals = JSON.parse(localStorage.getItem('trackedGoals')) || [];
                     
-
-                    const splitGoals = rawGoals.replace('}{', '}|{').split('|');
-                    const trackedGoals = splitGoals.map(goal => JSON.parse(goal));
-
-                    console.log(trackedGoals);
-                    
-                      // Calculate completion percentage for each goal and sort from greatest to least
-                    const sortedGoals = [...trackedGoals].sort((a, b) => {
-                        // Calculate completion percentage for goal A
-                        let percentA = 0;
-                        if (a.completed) {
-                            percentA = 100;
-                        } else if (a.tracking && a.tracking.target > 0) {
-                            percentA = Math.min(100, Math.round((a.tracking.current / a.tracking.target) * 100));
-                        }
-                        
-                        // Calculate completion percentage for goal B
-                        let percentB = 0;
-                        if (b.completed) {
-                            percentB = 100;
-                        } else if (b.tracking && b.tracking.target > 0) {
-                            percentB = Math.min(100, Math.round((b.tracking.current / b.tracking.target) * 100));
-                        }
-                        
-                        // Sort from greatest to least
-                        return percentB - percentA;
-                    });
-
-                    console.log(sortedGoals);
-                    
-                    // Create HTML for the goal tracker section
                     let goalTrackerHTML = `
                         <div class="breakdown-section">
                         <div class="summary-title">Goals at a Glance</div>
                     `;
-                    
-                    if (sortedGoals.length === 0) {
-                        goalTrackerHTML += `<p>No goals set. Add goals in the Goals section.</p>`;
-                    } else {
-                        sortedGoals.forEach(goal => {
-                            // Calculate progress percentage
-                            let progressPercentage = 0;
-                            if (goal.tracking && goal.tracking.target > 0) {
-                                progressPercentage = Math.min(100, Math.round((goal.tracking.current / goal.tracking.target) * 100));
-                            }
-                            
-                            // For completed goals, always show 100%
-                            if (goal.completed) {
-                                progressPercentage = 100;
-                            }
-                            
 
-                            goalTrackerHTML += `
-                                <div class="goal-tracker-item">
-                                <div class="goal-info">${goal.text}</div>
-                                <span class="goal-status">
-                                    <div class="loading-bar">
-                                        <div class="loading-bar-fill" style="width: ${(goal.tracking.current/goal.tracking.target)*100}%"></div>
-                                    </div>
-                                    Progress: ${goal.tracking ? ` (${goal.tracking.current}/${goal.tracking.target} ${goal.tracking.metric})` : ''}
-                                </span>
-                                </div>
-                            `;
+                    try {
+                        const splitGoals = rawGoals.replace('}{', '}|{').split('|');
+                        const trackedGoals = splitGoals.map(goal => JSON.parse(goal));
+
+                        console.log(trackedGoals);
+                    
+                        // Calculate completion percentage for each goal and sort from greatest to least
+                        const sortedGoals = [...trackedGoals].sort((a, b) => {
+                            // Calculate completion percentage for goal A
+                            let percentA = 0;
+                            if (a.completed) {
+                                percentA = 100;
+                            } else if (a.tracking && a.tracking.target > 0) {
+                                percentA = Math.min(100, Math.round((a.tracking.current / a.tracking.target) * 100));
+                            }
+                            
+                            // Calculate completion percentage for goal B
+                            let percentB = 0;
+                            if (b.completed) {
+                                percentB = 100;
+                            } else if (b.tracking && b.tracking.target > 0) {
+                                percentB = Math.min(100, Math.round((b.tracking.current / b.tracking.target) * 100));
+                            }
+                            
+                            // Sort from greatest to least
+                            return percentB - percentA;
                         });
-                    }
-                    
-                    
 
-                    goalTrackerHTML += `</div>`;
+                        console.log(sortedGoals);
+                        
+                        // Create HTML for the goal tracker section
+
+                        
+                        if (sortedGoals.length === 0) {
+                            goalTrackerHTML += `<p>No goals set. Add goals in the Goals section.</p>`;
+                        } else {
+                            sortedGoals.forEach(goal => {
+                                // Calculate progress percentage
+                                let progressPercentage = 0;
+                                if (goal.tracking && goal.tracking.target > 0) {
+                                    progressPercentage = Math.min(100, Math.round((goal.tracking.current / goal.tracking.target) * 100));
+                                }
+                                
+                                // For completed goals, always show 100%
+                                if (goal.completed) {
+                                    progressPercentage = 100;
+                                }
+                                
+
+                                goalTrackerHTML += `
+                                    <div class="goal-tracker-item">
+                                    <div class="goal-info">${goal.text}</div>
+                                    <span class="goal-status">
+                                        <div class="loading-bar">
+                                            <div class="loading-bar-fill" style="width: ${(goal.tracking.current/goal.tracking.target)*100}%"></div>
+                                        </div>
+                                        Progress: ${goal.tracking ? ` (${goal.tracking.current}/${goal.tracking.target} ${goal.tracking.metric})` : ''}
+                                    </span>
+                                    </div>
+                                `;
+                            });
+                        }
+                        goalTrackerHTML += `</div>`;
+                    }
+                    catch (e) {
+                        goalTrackerHTML += `
+                            <div class="empty-tracking">
+                                <p>No tracked goals found.<br/><br/>Add new tracked goals by visiting the goals tab!</p>
+                            </div>
+                            `;
+                    }
                     
                     return goalTrackerHTML;
                 }
